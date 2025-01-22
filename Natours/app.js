@@ -3,6 +3,17 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
+//creating a middelware
+app.use((req, res, next) => {
+  console.log('Hello from the MIddleware');
+  next();
+});
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString(); //manipulating the req
+  next();
+});
+
 //route
 //reading the tour data from dev-data
 const tours = JSON.parse(
@@ -12,6 +23,7 @@ const getTours = (req, res) => {
   res.status(200).json({
     //sending with jsend
     status: 'success',
+    requestedAt: req.requestTime,
     results: tours.length,
     data: {
       tours,
@@ -78,7 +90,8 @@ const deleteTour = (req, res) => {
     });
   }
 };
-app.route('/api/V1/tours').get(getTours).post(createTour); //chaining the methods for the same route
+//chaining the methods for the same route
+app.route('/api/V1/tours').get(getTours).post(createTour);
 app
   .route('/api/V1/tours/:id')
   .get(getTour)
