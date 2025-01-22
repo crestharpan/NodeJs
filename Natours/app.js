@@ -8,7 +8,7 @@ app.use(express.json());
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
-app.get('/api/V1/tours', (req, res) => {
+const getTours = (req, res) => {
   res.status(200).json({
     //sending with jsend
     status: 'success',
@@ -17,10 +17,8 @@ app.get('/api/V1/tours', (req, res) => {
       tours,
     },
   });
-});
-
-//reading the tour data of specific id
-app.get('/api/V1/tours/:id', (req, res) => {
+};
+const getTour = (req, res) => {
   const id = parseInt(req.params.id);
   // if (id > tours.length - 1) {
   const tour = tours.find((el) => el.id === id);
@@ -38,10 +36,8 @@ app.get('/api/V1/tours/:id', (req, res) => {
       },
     });
   }
-});
-
-//getting the req from client
-app.post('/api/V1/tours', (req, res) => {
+};
+const createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   const newTour = Object.assign({ id: newId }, req.body);
   tours.push(newTour);
@@ -55,7 +51,46 @@ app.post('/api/V1/tours', (req, res) => {
       });
     }
   );
-});
+};
+const updateTour = (req, res) => {
+  if (req.params.id * 1 > tours.length - 1) {
+    res.status(404).json({
+      status: 'Fail',
+      message: 'Invalid Tour ID',
+    });
+  } else {
+    res.status(200).json({
+      status: 'successful',
+      data: '<UPDATED>',
+    });
+  }
+};
+const deleteTour = (req, res) => {
+  if (req.params.id * 1 > tours.length - 1) {
+    res.status(404).json({
+      status: 'Fail',
+      message: 'Invalid Tour ID',
+    });
+  } else {
+    res.status(204).json({
+      status: 'successful',
+      data: null, //to show that the data no longer exist
+    });
+  }
+};
+app.route('/api/V1/tours').get(getTours).post(createTour); //chaining the methods for the same route
+app
+  .route('/api/V1/tours/:id')
+  .get(getTour)
+  .patch(updateTour)
+  .delete(deleteTour);
+
+/*reading the tour data of specific id
+app.get('/api/V1/tours/:id', getTour);
+//PATCH(update) request
+app.patch('/api/V1/tours/:id', updateTour);
+//Deleting
+app.delete('/api/V1/tours/:id', deleteTour);*/
 
 const port = 8000;
 app.listen(port, () => {
