@@ -1,6 +1,9 @@
 const fs = require("fs"); // core modules
 const url = require("url");
 const http = require("http");
+
+const slugify = require("slugify");
+
 //importing own built modules
 const replaceTempHtml = require("./modules/replaceTemplate");
 
@@ -19,6 +22,8 @@ const tempProduct = fs.readFileSync(
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
 const dataObj = JSON.parse(data);
 
+const slugs = dataObj.map((el) => slugify(el.productName, { lower: true }));
+console.log(slugs);
 //server
 const server = http.createServer((req, res) => {
   const { query, pathname } = url.parse(req.url, true);
