@@ -6,6 +6,7 @@ const morgan = require('morgan');
 //1)creating a middelware
 app.use(morgan('dev')); //it will return the req
 app.use(express.json());
+
 app.use((req, res, next) => {
   console.log('Hello from the MIddleware');
   next();
@@ -16,8 +17,7 @@ app.use((req, res, next) => {
   next();
 });
 
-//route
-//reading the tour data from dev-data
+//reading the data from dev-data
 const users = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/users.json`)
 );
@@ -134,19 +134,18 @@ const deleteUser = (req, res) => {
 
 //3) ROUTES
 //chaining the methods for the same route
-app.route('/api/V1/tours').get(getTours).post(createTour);
-app
-  .route('/api/V1/tours/:id')
-  .get(getTour)
-  .patch(updateTour)
-  .delete(deleteTour);
+const tourRouter = express.Router();
+const userRouter = express.Router();
 
-app.route('/api/V1/users').get(getAllUsers).post(createUser);
-app
-  .route('/api/V1/users/:id')
-  .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser);
+tourRouter.route('/').get(getTours).post(createTour);
+tourRouter.route('/:id').get(getTour).patch(updateTour).delete(deleteTour);
+
+userRouter.route('/').get(getAllUsers).post(createUser);
+userRouter.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
+
+app.use('/api/V1/tours', tourRouter);
+app.use('/api/V1/users', userRouter);
+
 //4) START SERVERS
 const port = 8000;
 app.listen(port, () => {
