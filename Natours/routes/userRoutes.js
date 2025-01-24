@@ -1,48 +1,17 @@
-const fs = require('fs');
 const express = require('express');
 
-//reading the data from dev-data
-const users = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/users.json`)
-);
-// ROUTE HANDLERS
-const getAllUsers = (req, res) => {
-  res.status(200).json({
-    status: 'successful',
-    data: {
-      users,
-    },
-  });
-};
-const getUser = (req, res) => {
-  const id = req.params.id;
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not defined',
-  });
-};
-const createUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not defined',
-  });
-};
-const updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not defined',
-  });
-};
-const deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not defined',
-  });
-};
+const userController = require('./../Controllers/userController');
 
 const router = express.Router();
 
-router.route('/').get(getAllUsers).post(createUser);
-router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
+router
+  .route('/')
+  .get(userController.getAllUsers)
+  .post(userController.createUser);
+router
+  .route('/:id')
+  .get(userController.getUser)
+  .patch(userController.updateUser)
+  .delete(userController.deleteUser);
 
 module.exports = router;
