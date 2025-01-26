@@ -3,7 +3,7 @@ const app = express();
 const morgan = require('morgan');
 const server = require('./server');
 
-//exporting the routes module
+//importing the routes module
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 
