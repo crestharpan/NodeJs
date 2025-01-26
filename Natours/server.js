@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
+
 dotenv.config({ path: './config.env' });
 const app = require('./app');
-
 //START SERVERS
 const port = process.env.PORT || 8000;
 app.listen(port, () => {

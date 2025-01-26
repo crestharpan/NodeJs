@@ -1,6 +1,9 @@
 const express = require('express');
+
 const app = express();
+
 const morgan = require('morgan');
+
 const server = require('./server');
 
 //importing the routes module
@@ -15,10 +18,6 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json());
 app.use(express.static(`${__dirname}/public/overview.html`)); //serving static files
 
-app.use((req, res, next) => {
-  console.log('Hello from the MIddleware');
-  next();
-});
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString(); //manipulating the req
   next();
