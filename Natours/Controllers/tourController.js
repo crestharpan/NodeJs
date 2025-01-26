@@ -5,6 +5,15 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(404).json({
+      status: 'Unsuccessful',
+      message: 'Bad Request',
+    });
+  }
+  next();
+};
 exports.checkID = (req, res, next, val) => {
   console.log(`The id is :${val}`);
 
