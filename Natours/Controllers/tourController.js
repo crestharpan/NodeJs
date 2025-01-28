@@ -53,15 +53,36 @@ exports.createTour = async (req, res) => {
     });
   }
 };
-exports.updateTour = (req, res) => {
-  res.status(200).json({
-    status: 'successful',
-    data: '<UPDATED>',
-  });
+exports.updateTour = async (req, res) => {
+  try {
+    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
+      status: 'successful',
+      data: {
+        tour,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'failed',
+      message: err,
+    });
+  }
 };
-exports.deleteTour = (req, res) => {
-  (204).json({
-    status: 'successful',
-    data: null, //to show that the data no longer exist
-  });
+exports.deleteTour = async (req, res) => {
+  try {
+    await Tour.findByIdAndDelete(req.parmas.id);
+    req.status(200).json({
+      status: 'successful',
+      data: null, //to show that the data no longer exist
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'failed',
+      message: err,
+    });
+  }
 };
