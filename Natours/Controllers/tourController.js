@@ -3,12 +3,12 @@ const Tour = require('../models/tourModel');
 // ROUTE HANDLERS
 exports.getTours = async (req, res) => {
   try {
-    const tours = await Tour.find();
+    const tours = await Tour.find(req.query);
     res.status(200).json({
       //sending with jsend
       status: 'success',
       requestedAt: req.requestTime,
-
+      request: tours.length,
       data: {
         tours,
       },
