@@ -3,9 +3,20 @@ const Tour = require('../models/tourModel');
 // ROUTE HANDLERS
 exports.getTours = async (req, res) => {
   try {
-    const tours = await Tour.find(req.query);
+    //BUILD THE QUERY
+    //making a hard copy of req.query objects
+    const queryObj = { ...req.query };
+    const excludeFields = ['sort', 'limit', 'page'];
+
+    excludeFields.forEach((element) => {
+      delete queryObj[element];
+    });
+    console.log(queryObj);
+
+    //EXECUTE THE QUERY
+    const query = Tour.find(queryObj);
+    const tours = await query;
     res.status(200).json({
-      //sending with jsend
       status: 'success',
       requestedAt: req.requestTime,
       request: tours.length,
