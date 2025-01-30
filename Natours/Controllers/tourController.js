@@ -5,6 +5,7 @@ exports.getTours = async (req, res) => {
   try {
     //BUILD THE QUERY
     //making a hard copy of req.query objects
+    //1) FILTERING
     const queryObj = { ...req.query };
     const excludeFields = ['sort', 'limit', 'page'];
 
@@ -13,8 +14,13 @@ exports.getTours = async (req, res) => {
     });
     console.log(queryObj);
 
+    //2) ADVANCED FILTERING
+    //{ duration: { gte: '5' }, difficulty: 'easy' }
+    let querStr = JSON.stringify(queryObj);
+    querStr = querStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    console.log(querStr);
     //EXECUTE THE QUERY
-    const query = Tour.find(queryObj);
+    const query = Tour.find(JSON.parse(querStr));
     const tours = await query;
     res.status(200).json({
       status: 'success',
