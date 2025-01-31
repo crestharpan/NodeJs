@@ -9,14 +9,7 @@ const Db = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD,
 );
-mongoose
-  .connect(Db, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log('DB connection Successful'));
+mongoose.connect(Db).then(() => console.log('DB connection Successful'));
 
 //READ FILE FORM TOURS-SIMPLE.JSON
 const tours = JSON.parse(

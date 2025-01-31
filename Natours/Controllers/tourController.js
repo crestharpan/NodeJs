@@ -5,22 +5,28 @@ exports.getTours = async (req, res) => {
   try {
     //BUILD THE QUERY
     //making a hard copy of req.query objects
-    //1) FILTERING
+    //1A) FILTERING
     const queryObj = { ...req.query };
+
     const excludeFields = ['sort', 'limit', 'page'];
 
     excludeFields.forEach((element) => {
       delete queryObj[element];
     });
-    console.log(queryObj);
 
-    //2) ADVANCED FILTERING
+    //1B) ADVANCED FILTERING
     //{ duration: { gte: '5' }, difficulty: 'easy' }
     let querStr = JSON.stringify(queryObj);
     querStr = querStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    console.log(querStr);
+    let query = Tour.find(JSON.parse(querStr));
+
+    //2) SORTING
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(req.query.sort);
+    }
+
     //EXECUTE THE QUERY
-    const query = Tour.find(JSON.parse(querStr));
     const tours = await query;
     res.status(200).json({
       status: 'success',
