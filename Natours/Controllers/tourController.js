@@ -8,7 +8,7 @@ exports.getTours = async (req, res) => {
     //1A) FILTERING
     const queryObj = { ...req.query };
 
-    const excludeFields = ['sort', 'limit', 'page'];
+    const excludeFields = ['page', 'sort', 'limit', 'fields'];
 
     excludeFields.forEach((element) => {
       delete queryObj[element];
@@ -28,6 +28,13 @@ exports.getTours = async (req, res) => {
       query = query.sort('-createdAt');
     }
 
+    //3) FIELD LIMITING FEATURE
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v'); //Excluding the __v
+    }
     //EXECUTE THE QUERY
     const tours = await query;
     res.status(200).json({
@@ -55,7 +62,7 @@ exports.getTour = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: 'Failed',
-      message: err,
+      message: err.message,
     });
   }
 };
