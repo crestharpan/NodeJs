@@ -1,5 +1,12 @@
 const Tour = require('../models/tourModel');
 
+exports.aliasRoute = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingsAverage,price';
+  req.query.fields = 'name,price,ratingsAverage,difficulty,summary';
+  next();
+};
+
 // ROUTE HANDLERS
 exports.getTours = async (req, res) => {
   try {
@@ -59,7 +66,7 @@ exports.getTours = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: 'Failed',
-      message: err,
+      message: err.message,
     });
   }
 };
