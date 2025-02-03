@@ -111,7 +111,7 @@ exports.getTourStats = async (req, res) => {
       },
       {
         $group: {
-          _id: '$difficulty',
+          _id: { $toUpper: '$difficulty' },
           numTours: { $sum: 1 },
           numRatings: { $sum: '$ratingsQuantity' },
           avgRating: { $avg: '$ratingsAverage' },
@@ -120,10 +120,66 @@ exports.getTourStats = async (req, res) => {
           maxPrice: { $max: '$price' },
         },
       },
+      {
+        $sort: { avgPrice: 1 },
+      },
+      // {
+      //   $match: { _id: { $ne: 'EASY' } }, //ne=> NOT EQUAL
+      // },
     ]);
-    req.status(200).json({
+    res.status(200).json({
       status: 'successful',
       data: stats,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'failed',
+      message: err,
+    });
+  }
+};
+exports.getMonthlyPlan = async (req, res) => {
+  try {
+    const year = req.params.year * 1;
+
+    const plan = await Tour.aggregate([
+      {
+        $unwind: '$startDates',
+      },
+      {
+        $match: {
+          startDates: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: '$startDates' },
+          numTourStarts: { $sum: 1 },
+          tours: { $push: '$name' },
+        },
+      },
+      {
+        $addFields: { month: '$_id' },
+      },
+      {
+        $project: {
+          //excluding the id in the data
+          _id: 0,
+        },
+      },
+      {
+        $sort: { numTourStarts: -1 },
+      },
+      {
+        $limit: 12,
+      },
+    ]);
+    res.status(200).json({
+      status: 'successful',
+      data: { plan },
     });
   } catch (err) {
     res.status(400).json({
