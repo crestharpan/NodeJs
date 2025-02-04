@@ -90,7 +90,7 @@ exports.updateTour = async (req, res) => {
 };
 exports.deleteTour = async (req, res) => {
   try {
-    await Tour.findByIdAndDelete(req.parmas.id);
+    await Tour.findByIdAndDelete(req.params.id);
     req.status(200).json({
       status: 'successful',
       data: null, //to show that the data no longer exist

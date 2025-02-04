@@ -43,7 +43,18 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    priceDiscount: Number,
+    priceDiscount: {
+      type: Number,
+      //CUSTOM VALIDATOR
+      //this will only point to the new document which is created using POST and not to update.
+      validate: {
+        message:
+          'The Discount price({VALUE}) should be less than original price',
+        validator: function (val) {
+          return val < this.price;
+        },
+      },
+    },
     summary: {
       type: String,
       trim: true,
