@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const slugify = require('slugify');
+
 const tourSchema = new mongoose.Schema(
   {
     name: {
@@ -7,6 +9,7 @@ const tourSchema = new mongoose.Schema(
       required: [true, 'A tour must have a name'],
       trim: true,
     },
+    slug: String,
     duration: {
       type: Number,
       required: [true, 'A true must have duration!'],
@@ -37,6 +40,10 @@ const tourSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    secret: {
+      type: Boolean,
+      default: false,
+    },
     description: {
       type: String,
       trim: true,
@@ -63,5 +70,19 @@ const tourSchema = new mongoose.Schema(
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
+
+//DOCUMENT MIDDLEWARW
+//IT RUNS BEFORE THE .SAVE() AND .CREATE() EVENT WHERE THE CALLBACK FUNCTION IS EXECUTED
+tourSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lowercase: true });
+  next();
+});
+
+//QUERY MIDDLEWARE
+tourSchema.pre(/^find/, function (next) {
+  this.find({ secret: { $ne: true } });
+  next();
+});
+
 const Tour = mongoose.model('Tour', tourSchema);
 module.exports = Tour;
