@@ -16,7 +16,6 @@ exports.getTours = async (req, res) => {
       .filter()
       .sort()
       .limitFields()
-      .limitFields()
       .paginate();
 
     //EXECUTE THE QUERY

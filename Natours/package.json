@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
-    "start:pro": "NODE_ENV=production nodemon server.js"
+    "start:pro": "NODE_ENV=production nodemon server.js",
+    "debug": "ndb server.js"
   },
   "author": "Arpan Shrestha",
   "license": "ISC",
