@@ -31,6 +31,7 @@ app.all('*', (req, res, next) => {
     status: 'Fail',
     message: `can't find the path ${req.originalUrl}`,
   });
+  next();
 });
 
 module.exports = app;
