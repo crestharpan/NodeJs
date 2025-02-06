@@ -6,6 +6,9 @@ const morgan = require('morgan');
 
 const server = require('./server');
 
+const AppError = require('./utils/appError');
+
+const globalErrorHandler = require('./Controllers/errorController');
 //importing the routes module
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -27,11 +30,10 @@ app.use('/api/V1/tours', tourRouter);
 app.use('/api/V1/users', userRouter);
 
 app.all('*', (req, res, next) => {
-  res.status(404).json({
-    status: 'Fail',
-    message: `can't find the path ${req.originalUrl}`,
-  });
-  next();
+  //CREATING THE APPERROR OBJECT AND PASSING THE ARGS
+  next(new AppError(`can't find the path ${req.originalUrl}`, 400));
 });
+
+app.use(globalErrorHandler);
 
 module.exports = app;
