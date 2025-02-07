@@ -9,6 +9,7 @@ exports.aliasRoute = (req, res, next) => {
 };
 
 // ROUTE HANDLERS
+
 exports.getTours = async (req, res) => {
   try {
     //CLASS OBJECT
@@ -50,24 +51,20 @@ exports.getTour = async (req, res) => {
   }
 };
 
-exports.createTour = async (req, res) => {
-  try {
-    // const newTour = new Tour({});
-    // newTour.save();
-    //alternative
-    const newTour = await Tour.create(req.body);
-
-    res.status(201).json({
-      status: 'successful',
-      data: newTour,
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'failed',
-      message: err,
-    });
-  }
+const createAsync = (fn) => {
+  return (req, res, next) => {
+    fn(req, res, next).catch(next);
+  };
 };
+
+exports.createTour = createAsync(async (req, res, next) => {
+  const newTour = await Tour.create(req.body);
+
+  res.status(201).json({
+    status: 'successful',
+    data: newTour,
+  });
+});
 exports.updateTour = async (req, res) => {
   try {
     const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
