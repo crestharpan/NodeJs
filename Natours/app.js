@@ -30,7 +30,7 @@ app.use('/api/V1/tours', tourRouter);
 app.use('/api/V1/users', userRouter);
 
 app.all('*', (req, res, next) => {
-  //CREATING THE APPERROR OBJECT AND PASSING THE ARGS
+  //CREATING THE APP-ERROR OBJECT AND PASSING THE ARGS
   next(new AppError(`can't find the path ${req.originalUrl}`, 400));
 });
 
