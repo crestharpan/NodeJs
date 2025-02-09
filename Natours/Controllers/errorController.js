@@ -2,7 +2,13 @@ const AppError = require('../utils/appError');
 
 const handleCastErrorDB = (err) => {
   const message = `Invalid ${err.path}:${err.value}`;
-  console.log(message);
+  return new AppError(message, 400);
+};
+
+const handleDuplicateFieldsDB = (err) => {
+  const value = err.errorResponse.keyValue.name;
+
+  const message = `Tour with name ${value} already exist`;
   return new AppError(message, 400);
 };
 
@@ -24,7 +30,7 @@ const sendErrPro = (err, res) => {
       message: err.message,
     });
 
-    //OTHER UNKNOW PROGRAMMING ERRORS: DON'T GIVE DETAILS ABOUT THE ERROR TO THE CLIENT
+    //OTHER UNKNOWN PROGRAMMING ERRORS: DON'T GIVE DETAILS ABOUT THE ERROR TO THE CLIENT
   } else {
     //LOG THE ERROR (FOR US TO IDENTIFY THE ERROR)
     // console.error('ERROR:', err);
@@ -47,9 +53,9 @@ module.exports = (err, req, res, next) => {
   } else if (process.env.NODE_ENV === 'production') {
     let error = Object.assign(err);
 
-    if (error.name === 'CastError') {
-      error = handleCastErrorDB(error);
-    }
+    if (error.name === 'CastError') error = handleCastErrorDB(error);
+    if (error.errorResponse.code === 11000)
+      error = handleDuplicateFieldsDB(error);
     sendErrPro(error, res);
   }
 };
