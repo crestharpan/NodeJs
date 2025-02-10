@@ -95,7 +95,7 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
-//DOCUMENT MIDDLEWARW
+//DOCUMENT MIDDLEWARE
 //IT RUNS BEFORE THE .SAVE() AND .CREATE() EVENT WHERE THE CALLBACK FUNCTION IS EXECUTED
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lowercase: true });
@@ -111,7 +111,7 @@ tourSchema.pre(/^find/, function (next) {
 //AGGREGATION MIDDLEWARE
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secret: { $ne: true } } });
-  console.log(this);
+
   next();
 });
 
