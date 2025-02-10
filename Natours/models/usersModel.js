@@ -4,6 +4,8 @@ const slugify = require('slugify');
 
 const validator = require('validator');
 
+const bcrypt = require('bcryptjs');
+
 //name,email,photo,password,confirm password
 const userSchema = new mongoose.Schema({
   name: {
@@ -17,7 +19,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'Add a Email address'],
-    unique: true,
+
     lowercase: true,
 
     validate: [validator.isEmail, 'Please provide a valid emaila address'],
@@ -38,17 +40,32 @@ const userSchema = new mongoose.Schema({
     minlength: [6, 'The password must be greater than 7 characters'],
     maxlength: [11, 'The password must be less than 11 characters'],
     upperCase: true,
+    //ONLY WORKS ON CREATE & SAVE
     validate: {
       validator: function (el) {
         return this.password === el; //CONFIRMING THE PASSWORD(RETURN EITHER TRUE OR FALSE)
       },
+      message: 'Password did not matched',
     },
   },
 });
 
-//MIDDLEWARE
+//DOCUMENT-MIDDLEWARE
 userSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lowercase: true });
+  next();
+});
+
+//IF PASSWORD FIELD IS NOT MODIFIED EXIT THE FUNCTION
+userSchema.pre('save', async function (next) {
+  // RUN THE FUNCTION WHEN PASSWORD IS MODIFIED
+  if (!this.isModified('password')) return;
+
+  //ENCRYPT THE PASSWORD
+  this.password = await bcrypt.hash(this.password, 12); //hash is async so it returns promise
+
+  //DELETE THE PASSWORD FIELD
+  this.passwordConfirm = undefined;
   next();
 });
 
