@@ -1,3 +1,5 @@
+const { promisify } = require('util');
+
 const jwt = require('jsonwebtoken');
 
 const AppError = require('../utils/appError');
@@ -5,6 +7,7 @@ const AppError = require('../utils/appError');
 const User = require('../models/usersModel');
 
 const catchAsync = require('../utils/catchAsync');
+const { decode } = require('punycode');
 
 const signToken = (id) => {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -38,7 +41,6 @@ exports.login = catchAsync(async (req, res, next) => {
 
   //2) CHECK IF USER EXIST && PASSWORD IS CORRECT
   const user = await User.findOne({ email }).select('+password'); //user is a document now and has access to instance method
-  console.log(user._id);
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect Email or Password', 401));
   }
@@ -49,4 +51,31 @@ exports.login = catchAsync(async (req, res, next) => {
     status: 'success',
     token,
   });
+});
+
+exports.protect = catchAsync(async (req, res, next) => {
+  //1) Getting the token and check if it's there
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+    console.log(token);
+  }
+  if (!token) return next(new AppError('You are not logged in', 401));
+
+  //2) Verifying the Token
+
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET); //Verify is async function
+
+  //3)Check if user still exists
+  const freshUser = await User.findOne({ _id: decoded.id });
+  if (!freshUser) return next(new AppError('The user does not exist', 401));
+
+  //4)check if the user changed the password after the token aws issued.
+
+  if (freshUser.changedPasswordAfter(decode.iat) === true)
+    return next(new AppError('Password Changed', 401));
+  next();
 });

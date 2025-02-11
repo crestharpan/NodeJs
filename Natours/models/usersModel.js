@@ -49,6 +49,9 @@ const userSchema = new mongoose.Schema({
       message: 'Password did not matched',
     },
   },
+  passwordChangedAt: {
+    type: Date,
+  },
 });
 
 //DOCUMENT-MIDDLEWARE
@@ -76,6 +79,18 @@ userSchema.methods.correctPassword = async function (
   userPassword,
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+//INSTANCE METHOD FOR CHECKING THE PASSWORD CHANGED OR NOT
+userSchema.methods.changedPasswordAfter = function (JWTTimeStamp) {
+  if (this.passwordChangedAt) {
+    const changeTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10,
+    );
+    return changeTimestamp > JWTTimeStamp;
+  }
+  return false; //FALSE MEANS NOT-CHANGED AND TRUE MEANS CHANGED
 };
 
 const User = mongoose.model('User', userSchema);
