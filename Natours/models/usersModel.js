@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema({
     minlength: [6, 'The password must be greater than 7 characters'],
     maxlength: [11, 'The password must be less than 11 characters'],
     upperCase: true,
+    select: false,
   },
   passwordConfirm: {
     type: String,
@@ -68,6 +69,14 @@ userSchema.pre('save', async function (next) {
   this.passwordConfirm = undefined;
   next();
 });
+
+//INSTANCE METHOD-(RETURNS EITHER TRUE OR FALSE ONLY)
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword,
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

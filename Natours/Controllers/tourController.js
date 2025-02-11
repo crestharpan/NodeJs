@@ -14,6 +14,7 @@ exports.aliasRoute = (req, res, next) => {
 
 exports.getTours = catchAsync(async (req, res, next) => {
   //CLASS OBJECT
+
   const features = new APIFeatures(Tour.find(), req.query)
     .filter()
     .sort()
