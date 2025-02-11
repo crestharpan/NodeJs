@@ -6,6 +6,11 @@ const User = require('../models/usersModel');
 
 const catchAsync = require('../utils/catchAsync');
 
+const signToken = (id) => {
+  return jwt.sign({ id: id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
@@ -13,10 +18,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
   });
-  const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
-
+  const token = signToken(newUser._id);
   res.status(200).json({
     status: 'Successfully Created',
     token,
@@ -35,16 +37,14 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   //2) CHECK IF USER EXIST && PASSWORD IS CORRECT
-  const user = User.findOne({ email }).select('+password'); //user is a document now and has access to instance method
-
+  const user = await User.findOne({ email }).select('+password'); //user is a document now and has access to instance method
+  console.log(user._id);
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect Email or Password', 401));
   }
 
   //3) IF EVERYTHING IS RIGHT, SEND THE JWT TOKEN TO THE CLIENT
-  const token = jwt.login({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
+  const token = signToken(user._id);
   res.status(200).json({
     status: 'success',
     token,
