@@ -7,7 +7,6 @@ const AppError = require('../utils/appError');
 const User = require('../models/usersModel');
 
 const catchAsync = require('../utils/catchAsync');
-const { decode } = require('punycode');
 
 const signToken = (id) => {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -20,6 +19,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
+    passwordChangedAt: req.body.passwordChangedAt,
   });
   const token = signToken(newUser._id);
   res.status(200).json({
@@ -61,7 +61,6 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
-    console.log(token);
   }
   if (!token) return next(new AppError('You are not logged in', 401));
 
@@ -74,8 +73,11 @@ exports.protect = catchAsync(async (req, res, next) => {
   if (!freshUser) return next(new AppError('The user does not exist', 401));
 
   //4)check if the user changed the password after the token aws issued.
-
-  if (freshUser.changedPasswordAfter(decode.iat) === true)
+  console.log('what i got', !freshUser.changedPasswordAfter(decoded.iat));
+  if (freshUser.changedPasswordAfter(decoded.iat) === true)
     return next(new AppError('Password Changed', 401));
+
+  //GRANT ACCESS
+  req.user = freshUser;
   next();
 });
