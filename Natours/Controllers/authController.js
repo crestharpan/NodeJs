@@ -20,6 +20,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
     passwordChangedAt: req.body.passwordChangedAt,
+    role: req.body.role,
   });
   const token = signToken(newUser._id);
   res.status(200).json({
@@ -69,15 +70,26 @@ exports.protect = catchAsync(async (req, res, next) => {
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET); //Verify is async function
 
   //3)Check if user still exists
-  const freshUser = await User.findOne({ _id: decoded.id });
-  if (!freshUser) return next(new AppError('The user does not exist', 401));
+  const currentUser = await User.findOne({ _id: decoded.id });
+  if (!currentUser) return next(new AppError('The user does not exist', 401));
 
   //4)check if the user changed the password after the token aws issued.
-  console.log('what i got', !freshUser.changedPasswordAfter(decoded.iat));
-  if (freshUser.changedPasswordAfter(decoded.iat) === true)
+  if (currentUser.changedPasswordAfter(decoded.iat) === true)
     return next(new AppError('Password Changed', 401));
 
   //GRANT ACCESS
-  req.user = freshUser;
+  req.user = currentUser; //USING MIDDLEARE TO MANIPULATE THE REQUEST
   next();
 });
+
+//RESTICATING THE OPERATION TO USER OF CERTAIN ROLE
+
+exports.restrictTO = (...roles) => {
+  return (req, res, next) => {
+    //ROLES IS AN ARRAY OF[ADMIN,LEAD-GUIDE]
+    if (!roles.includes(req.user.role)) {
+      return next(new AppError('Cannot perform the action', 403));
+    }
+    next();
+  };
+};
