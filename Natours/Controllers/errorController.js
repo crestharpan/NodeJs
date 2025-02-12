@@ -20,7 +20,9 @@ const handleValidatonErroDB = (err) => {
   return new AppError(message, 400);
 };
 
-const handleJwtToken = () => new AppError('Invalid token', 401);
+const handleJwtToken = () => {
+  return new AppError('Invalid token', 401);
+};
 
 const sendErrDev = (err, res) => {
   res.status(err.statusCode).json({
@@ -31,8 +33,9 @@ const sendErrDev = (err, res) => {
   });
 };
 
-const handleJwtExpiredError = () =>
-  new AppError('Your token has been expired. Please log in again', 401);
+const handleJwtExpiredError = () => {
+  return new AppError('Your token has been expired. Please log in again', 401);
+};
 const sendErrPro = (err, res) => {
   //OPERATIONA ERROR: SEND MESSAGE TO THE CLIENT
 
