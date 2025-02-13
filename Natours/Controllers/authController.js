@@ -143,8 +143,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.passwordConfirm = req.body.passwordConfirm;
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
-  //3) UPDATE CHANGEDPASSWORD PROPERTY IN THE MODEL
-  user.passwordChangedAt = Date.now();
+
   await user.save();
 
   //4)LOG THE USER IN AND SEND JWT

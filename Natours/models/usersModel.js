@@ -88,6 +88,12 @@ userSchema.methods.correctPassword = async function (
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
+userSchema.pre('save', function (next) {
+  if (!(this.isModified('password') || this.isNew)) return next();
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
 //INSTANCE METHOD FOR CHECKING THE PASSWORD CHANGED OR NOT
 userSchema.methods.changedPasswordAfter = function (JWTTimeStamp) {
   if (this.passwordChangedAt) {
