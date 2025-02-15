@@ -18,7 +18,7 @@ const createNewToken = (user, statusCode, res) => {
     status: 'Successfully Created',
     token,
     data: {
-      User,
+      user,
     },
   });
 };
@@ -153,7 +153,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   //1)GET USER FROM THE COLLECTION
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user.id).select('+password');
   if (!user) return next(new AppError('cannot find the user', 401));
 
   //2) CHECK IF POSTED CURRENT PASSWORD IS VALID
@@ -167,7 +167,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   //3) UPDATE THE PASSWORD
   user.password = req.body.password;
-  user.passwordConfirm = req.body.PasswordConfirm;
+  user.passwordConfirm = req.body.passwordConfirm;
   await user.save();
 
   //4)LOG THE USER IN AND SEND JWT
