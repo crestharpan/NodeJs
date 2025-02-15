@@ -24,21 +24,20 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     return next(new AppError(' This route is not for updating password', 400));
   }
   const user = await User.findOne({ _id: req.user.id });
-  if (user) {
-    const allowedField = ['name', 'email'];
-    Object.keys(req.body).forEach((el) => {
-      if (allowedField.includes(el)) {
-        user[el] = req.body[el];
-      }
-    });
-    await user.save({ validateModifiedOnly: true });
-    res.status(200).json({
-      status: 'success',
-      user,
-    });
-  } else {
+  if (!user) {
     return next(new AppError('User not found', 401));
   }
+  const allowedField = ['name', 'email'];
+  Object.keys(req.body).forEach((el) => {
+    if (allowedField.includes(el)) {
+      user[el] = req.body[el];
+    }
+  });
+  await user.save({ validateModifiedOnly: true });
+  res.status(200).json({
+    status: 'success',
+    user,
+  });
 });
 exports.getUser = (req, res) => {
   // const id = req.params.id;
