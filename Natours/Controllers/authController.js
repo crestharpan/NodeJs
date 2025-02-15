@@ -15,7 +15,7 @@ const signToken = (id) => {
 const createNewToken = (user, statusCode, res) => {
   const token = signToken(user.id);
   res.status(statusCode).json({
-    status: 'Successfully Created',
+    status: 'Success',
     token,
     data: {
       user,
