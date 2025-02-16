@@ -4,12 +4,13 @@ const User = require('../models/usersModel');
 const catchAsync = require('../utils/catchAsync');
 
 //reading the data from dev-data
-const users = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/users.json`),
-);
+// const users = JSON.parse(
+//   fs.readFileSync(`${__dirname}/../dev-data/data/users.json`),
+// );
 
 // ROUTE HANDLERS
-exports.getAllUsers = (req, res) => {
+exports.getAllUsers = async (req, res) => {
+  const users = await User.find();
   res.status(200).json({
     status: 'successful',
     data: {
@@ -39,11 +40,21 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     user,
   });
 });
-exports.getUser = (req, res) => {
-  // const id = req.params.id;
+
+//JUST DEACTIVATING THE USER
+exports.deleteMe = catchAsync(async (req, res) => {
+  await User.findByIdAndUpdate(req.user.id, { isActive: false });
+  res.status(204).json({
+    status: 'Success',
+    data: null,
+  });
+});
+
+exports.getUser = async (req, res) => {
+  const user = await User.findById(req.params.id);
   res.status(500).json({
     status: 'error',
-    message: 'This route is not defined',
+    user,
   });
 };
 exports.createUser = (req, res) => {
