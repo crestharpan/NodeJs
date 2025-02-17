@@ -1,21 +1,23 @@
 const express = require('express');
-
 const app = express();
-
 const morgan = require('morgan');
-
-const server = require('./server');
-
-const AppError = require('./utils/appError');
-
+const rateLimit = require('express-rate-limit');
 const globalErrorHandler = require('./Controllers/errorController');
 //importing the routes module
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 
+//GLOBAL MIDDLEWARE
+
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev')); //it will return the req
 }
+
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many request from the same ip, Try again in 1 hour',
+});
 
 app.use(express.json());
 app.use(express.static(`${__dirname}/public/overview.html`)); //serving static files
@@ -26,6 +28,7 @@ app.use((req, res, next) => {
 });
 
 // ROUTES
+app.use('/api', limiter); //TO USE LIMITER ON ALL ROUTES FOR /API
 app.use('/api/V1/tours', tourRouter);
 app.use('/api/V1/users', userRouter);
 
