@@ -28,6 +28,9 @@ app.use('/api', limiter); //TO USE LIMITER ON ALL ROUTES FOR /API
 //BODY PARSER(READING DATA FROM BODY inTO REQ.BODY)
 app.use(express.json({ limit: '10KB' }));
 
+//DATA SANITIZATION AGAINST NOSQL QUERY INJECTION
+//DATA SANTIZATION AGAINST CROSS-SITE ATTACK
+
 //serving static files
 app.use(express.static(`${__dirname}/public/overview.html`));
 
