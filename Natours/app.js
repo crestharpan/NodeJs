@@ -38,7 +38,7 @@ app.use(mongoSantitize());
 //DATA SANTIZATION AGAINST CROSS-SITE ATTACK
 app.use(xss());
 
-//PREVENT PARAMETER POLLUTION
+//PREVENT PARAMETER POLLUTION(HPP)
 app.use(
   hpp({
     whitelist: [
