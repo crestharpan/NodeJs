@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const User = require('./usersModel');
 const slugify = require('slugify');
 
 const tourSchema = new mongoose.Schema(
@@ -24,7 +24,6 @@ const tourSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: [true, 'A tour must have a price'],
-      unique: true,
     },
     maxGroupSize: {
       type: Number,
@@ -85,6 +84,31 @@ const tourSchema = new mongoose.Schema(
       select: false,
     },
     startDates: [Date],
+    startLocation: {
+      //GEOJson
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
+    guides: Array,
   },
   {
     toJSON: { virtuals: true },
@@ -99,6 +123,12 @@ tourSchema.virtual('durationWeeks').get(function () {
 //IT RUNS BEFORE THE .SAVE() AND .CREATE() EVENT WHERE THE CALLBACK FUNCTION IS EXECUTED
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lowercase: true });
+  next();
+});
+tourSchema.pre('save', async function (next) {
+  const guidesPromises = this.guides.map((id) => User.findById(id));
+  this.guides = await Promise.all(guidesPromises);
+
   next();
 });
 
