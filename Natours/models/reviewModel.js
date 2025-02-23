@@ -43,8 +43,8 @@ const reveiwSchema = new mongoose.Schema(
 // });
 reveiwSchema.pre(/^find/, function (next) {
   this.populate({
-    path: 'user tour',
-    select: '-__v -passwordChangedAt',
+    path: 'user',
+    select: 'name photo',
   });
   next();
 });

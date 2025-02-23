@@ -122,6 +122,12 @@ const tourSchema = new mongoose.Schema(
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
+//Virtual Populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
 
 //DOCUMENT MIDDLEWARE
 //IT RUNS BEFORE THE .SAVE() AND .CREATE() EVENT WHERE THE CALLBACK FUNCTION IS EXECUTED
