@@ -1,4 +1,5 @@
 const express = require('express');
+
 const app = express();
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -12,6 +13,7 @@ const globalErrorHandler = require('./Controllers/errorController');
 //importing the routes module
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 
 //GLOBAL MIDDLEWARE
 app.use(helmet()); //SET SECURITY HTTP HEADERS
@@ -64,6 +66,7 @@ app.use((req, res, next) => {
 // ROUTES
 app.use('/api/V1/tours', tourRouter);
 app.use('/api/V1/users', userRouter);
+app.use('/api/V1/reviews', reviewRouter);
 
 app.all('*', (req, res, next) => {
   //CREATING THE APP-ERROR OBJECT AND PASSING THE ARGS

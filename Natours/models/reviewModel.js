@@ -22,7 +22,7 @@ const reveiwSchema = new mongoose.Schema(
       required: [true, 'the review must belong to a tour'],
     },
 
-    users: {
+    user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
       required: [true, 'the review must belong to a user'],
@@ -33,5 +33,21 @@ const reveiwSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   },
 );
-const Review = mongoose.Model('Review', reveiwSchema);
+//MIDDLEWARE
+// reveiwSchema.pre(/^find/, async function (next) {
+//   await this.populate({
+//     path: 'user',
+//     select: '-__v -passwordChangedAt',
+//   });
+//   next();
+// });
+reveiwSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'user tour',
+    select: '-__v -passwordChangedAt',
+  });
+  next();
+});
+
+const Review = mongoose.model('Review', reveiwSchema);
 module.exports = Review;
