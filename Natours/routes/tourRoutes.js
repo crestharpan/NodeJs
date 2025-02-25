@@ -5,6 +5,8 @@ const tourController = require('../Controllers/tourController');
 
 const authController = require('../Controllers/authController');
 
+const reviewController = require('../Controllers/reviewController');
+
 const router = express.Router();
 
 // router.param('id', tourController.checkID);
@@ -29,5 +31,14 @@ router
     authController.restrictTO('admin', 'lead-guide'), //ONLY GIVING ACCESS TO ADMIN AND LEAD-GUIDE TO DELETE THE TOUR
     tourController.deleteTour,
   );
+
+router
+  .route('/:tourId/reviews')
+  .post(
+    authController.protect,
+    authController.restrictTO('user'),
+    reviewController.createReview,
+  )
+  .get(authController.protect, reviewController.getReviews);
 
 module.exports = router;
