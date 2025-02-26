@@ -1,6 +1,7 @@
 const AppError = require('../utils/appError');
 const User = require('../models/usersModel');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 //reading the data from dev-data
 // const users = JSON.parse(
@@ -40,7 +41,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-//JUST DEACTIVATING THE USER
+//JUST DEACTIVATING BY USER THEMSELVES
 exports.deleteMe = catchAsync(async (req, res) => {
   await User.findByIdAndUpdate(req.user.id, { isActive: false });
   res.status(204).json({
@@ -68,9 +69,4 @@ exports.updateUser = (req, res) => {
     message: 'This route is not defined',
   });
 };
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not defined',
-  });
-};
+exports.deleteUser = factory.deleteOne(User);
