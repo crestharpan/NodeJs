@@ -1,13 +1,12 @@
 const express = require('express');
 
 //importing the routeHandler from Controllers
-const tourController = require('../Controllers/tourController');
 
 const authController = require('../Controllers/authController');
 
 const reviewController = require('../Controllers/reviewController');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router
   .route('/')
