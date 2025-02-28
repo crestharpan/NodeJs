@@ -1,5 +1,4 @@
 const Tour = require('../models/tourModel');
-const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 
@@ -12,37 +11,10 @@ exports.aliasRoute = (req, res, next) => {
 
 // ROUTE HANDLERS
 
-exports.getTours = catchAsync(async (req, res, next) => {
-  //CLASS OBJECT
-
-  const features = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-
-  //EXECUTE THE QUERY
-  const tours = await features.query;
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime,
-    request: tours.length,
-    data: {
-      tours,
-    },
-  });
-});
-exports.getTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id).populate('reviews');
-  res.status(200).json({
-    status: 'Success',
-    data: tour,
-  });
-});
-
+exports.getTours = factory.getAll(Tour);
+exports.getTour = factory.getOne(Tour, { path: 'reviews' });
 exports.createTour = factory.createOne(Tour);
 exports.updateTour = factory.updateOne(Tour);
-
 exports.deleteTour = factory.deleteOne(Tour);
 
 exports.getTourStats = catchAsync(async (req, res, next) => {
