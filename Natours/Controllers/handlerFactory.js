@@ -10,3 +10,28 @@ exports.deleteOne = (Model) =>
       data: null, //to show that the data no longer exist
     });
   });
+
+exports.updateOne = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!doc) return next(new AppError('could not find the document', 404));
+    res.status(200).json({
+      status: 'successful',
+      data: {
+        doc,
+      },
+    });
+  });
+
+exports.createOne = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const doc = await Model.create(req.body);
+
+    res.status(201).json({
+      status: 'successful',
+      data: doc,
+    });
+  });
