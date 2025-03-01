@@ -25,16 +25,30 @@ router
   .get(tourController.aliasRoute, tourController.getTours);
 
 router.route('/tour-stats').get(tourController.getTourStats);
-router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
+router
+  .route('/monthly-plan/:year')
+  .get(
+    authController.protect,
+    authController.restrictTO('admin', 'lead-guide', 'guide'),
+    tourController.getMonthlyPlan,
+  );
 
 router
   .route('/')
-  .get(authController.protect, tourController.getTours) //ONLY LOGGED IN USERS GET ALL TOURS ACCESS
-  .post(tourController.createTour);
+  .get(tourController.getTours) //ONLY LOGGED IN USERS GET ALL TOURS ACCESS
+  .post(
+    authController.protect,
+    authController.restrictTO('admin', 'lead-guide'),
+    tourController.createTour,
+  );
 router
   .route('/:id')
   .get(tourController.getTour)
-  .patch(tourController.updateTour)
+  .patch(
+    authController.protect,
+    authController.restrictTO('admin', 'lead-guide'),
+    tourController.updateTour,
+  )
   .delete(
     authController.protect,
     authController.restrictTO('admin', 'lead-guide'), //ONLY GIVING ACCESS TO ADMIN AND LEAD-GUIDE TO DELETE THE TOUR
