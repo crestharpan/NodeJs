@@ -131,7 +131,8 @@ tourSchema.virtual('reviews', {
 
 //1 for arranging the price in ascending order
 //-1 for descending order
-tourSchema.index({ price: 1 });
+
+tourSchema.index({ price: 1, ratingsAverage: -1 });
 
 //DOCUMENT MIDDLEWARE
 //IT RUNS BEFORE THE .SAVE() AND .CREATE() EVENT WHERE THE CALLBACK FUNCTION IS EXECUTED
