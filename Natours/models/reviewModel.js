@@ -64,7 +64,14 @@ reveiwSchema.statics.calcAverageRatings = async function (tourId) {
   });
 };
 reveiwSchema.post('save', function () {
+  //this points to the current review
   this.constructor.calcAverageRatings(this.tour);
+});
+//findByIdAndUpdate
+//findByIdAndDelete
+
+reveiwSchema.post(/^findOneAnd/, async (doc) => {
+  await doc.constructor.calcAverageRatings(doc.tour);
 });
 
 const Review = mongoose.model('Review', reveiwSchema);
