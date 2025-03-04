@@ -81,5 +81,9 @@ reveiwSchema.post(/^findOneAnd/, async (doc) => {
   await doc.constructor.calcAverageRatings(doc.tour);
 });
 
+//Indexes
+//Each combination of tour and user has to be unique
+reveiwSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 const Review = mongoose.model('Review', reveiwSchema);
 module.exports = Review;
