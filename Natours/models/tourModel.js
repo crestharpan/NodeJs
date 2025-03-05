@@ -134,7 +134,7 @@ tourSchema.virtual('reviews', {
 //-1 for descending order
 
 tourSchema.index({ price: 1, ratingsAverage: -1 });
-
+tourSchema.index({ startLocation: '2dsphere' });
 //DOCUMENT MIDDLEWARE
 //IT RUNS BEFORE THE .SAVE() AND .CREATE() EVENT WHERE THE CALLBACK FUNCTION IS EXECUTED
 tourSchema.pre('save', function (next) {
