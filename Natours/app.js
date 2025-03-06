@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 
 const app = express();
 const morgan = require('morgan');
@@ -15,6 +16,11 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
+//serving static files
+app.use(express.static(path.join(__dirname, '/public')));
 //GLOBAL MIDDLEWARE
 app.use(helmet()); //SET SECURITY HTTP HEADERS
 
@@ -53,9 +59,6 @@ app.use(
     ],
   }),
 );
-
-//serving static files
-app.use(express.static(`${__dirname}/public/overview.html`));
 
 //TEST MIDDLEWARE
 app.use((req, res, next) => {
