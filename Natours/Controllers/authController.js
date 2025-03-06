@@ -51,6 +51,7 @@ exports.login = catchAsync(async (req, res, next) => {
   //DESTRUCTURING THE OBJECT
   const { email, password } = req.body;
   //1) CHECK IF THE EMAIL AND PASSWORD EXIST
+  console.log(email, password);
   if (!email || !password) {
     return next(new AppError('Please provide the email or password', 400));
   }

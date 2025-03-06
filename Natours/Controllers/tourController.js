@@ -111,3 +111,36 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
     },
   });
 });
+exports.getDistances = catchAsync(async (req, res, next) => {
+  const { latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+  const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
+
+  if (!(lat || lng)) next(new AppError('Enter your position', 400));
+
+  const distances = await Tour.aggregate([
+    {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: [lng * 1, lat * 1],
+        },
+        distanceField: 'distance', //gives the distance in meter
+        distanceMultiplier: multiplier, //Transform the distance in meter into km by multiplying by (1/1000) or to miles
+      },
+    },
+    {
+      $project: {
+        distance: 1,
+        name: 1,
+      },
+    },
+  ]);
+  res.status(200).json({
+    status: 'success',
+    results: distances.length,
+    data: {
+      data: distances,
+    },
+  });
+});
