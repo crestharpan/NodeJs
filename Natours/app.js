@@ -67,6 +67,9 @@ app.use((req, res, next) => {
 });
 
 // ROUTES
+app.get('/', (req, res) => {
+  res.status(200).render('base'); //INCLUDING THE VIEWS
+});
 app.use('/api/V1/tours', tourRouter);
 app.use('/api/V1/users', userRouter);
 app.use('/api/V1/reviews', reviewRouter);
