@@ -66,13 +66,26 @@ app.use((req, res, next) => {
   next();
 });
 
-// ROUTES
+//INCLUDING THE VIEWS
 app.get('/', (req, res) => {
   res.status(200).render('base', {
+    title: 'Exciting tours for adventurous people',
     tour: 'The forest Hiker',
     user: 'Jonas',
-  }); //INCLUDING THE VIEWS
+  });
 });
+app.get('/overview', (req, res) => {
+  res.status(200).render('overview', {
+    title: 'All Tours',
+  });
+});
+app.get('/tour', (req, res) => {
+  res.status(200).render('tour', {
+    title: 'The Forest Hiker Tour',
+  });
+});
+
+// ROUTES
 app.use('/api/V1/tours', tourRouter);
 app.use('/api/V1/users', userRouter);
 app.use('/api/V1/reviews', reviewRouter);
