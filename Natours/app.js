@@ -15,7 +15,7 @@ const globalErrorHandler = require('./Controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
-const viewRouter = require('./routes/reviewRoutes');
+const viewRouter = require('./routes/viewRoutes');
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
@@ -67,13 +67,13 @@ app.use((req, res, next) => {
   next();
 });
 
-//INCLUDING THE VIEWS
-app.use('/', viewRouter);
-
 // ROUTES
 app.use('/api/V1/tours', tourRouter);
 app.use('/api/V1/users', userRouter);
 app.use('/api/V1/reviews', reviewRouter);
+
+//INCLUDING THE VIEWS
+app.use('/', viewRouter);
 
 app.all('*', (req, res, next) => {
   //CREATING THE APP-ERROR OBJECT AND PASSING THE ARGS
