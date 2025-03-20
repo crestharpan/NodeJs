@@ -8,7 +8,7 @@ const rateLimit = require('express-rate-limit');
 const mongoSantitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
-
+const cookieParser=require('cookie-parser') //PARSE COOKIE FROM THE INCOMING REQUEST
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./Controllers/errorController');
 //importing the routes module
@@ -42,6 +42,7 @@ app.use('/api', limiter); //TO USE LIMITER ON ALL ROUTES FOR /API
 
 //BODY PARSER(READING DATA FROM BODY inTO REQ.BODY)
 app.use(express.json({ limit: '10KB' }));
+app.use(cookieParser())
 
 //DATA SANITIZATION AGAINST NOSQL QUERY INJECTION
 app.use(mongoSantitize());
@@ -66,6 +67,7 @@ app.use(
 //TEST MIDDLEWARE
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString(); //manipulating the req
+  console.log(req.cookies);
   next();
 });
 
