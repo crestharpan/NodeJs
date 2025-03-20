@@ -23,7 +23,9 @@ app.set('views', path.join(__dirname, 'views'));
 //serving static files
 app.use(express.static(path.join(__dirname, '/public')));
 //GLOBAL MIDDLEWARE
-app.use(helmet()); //SET SECURITY HTTP HEADERS
+app.use(
+ helmet()
+);//SET SECURITY HTTP HEADERS
 
 //DEVELOPMENT LOGGING
 if (process.env.NODE_ENV === 'development') {
