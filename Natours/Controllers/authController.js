@@ -98,7 +98,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 //ONLY FOR RENDERED PAGES
-exports.isLoogedIn = catchAsync(async (req, res, next) => {
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
 
   if(req.cookies.jwt){
     //1) Verifying the Token
