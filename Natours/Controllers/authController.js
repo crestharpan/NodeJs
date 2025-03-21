@@ -21,7 +21,7 @@ const createNewToken = (user, statusCode, res) => {
     httpOnly: true,
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-  res.cookie('Jwt', token, cookieOptions);
+  res.cookie('jwt', token, cookieOptions);
 
   //REMOVE PASSWORD FROM THE OUTPUT
   user.password = undefined;
@@ -62,7 +62,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect Email or Password', 401));
   }
 
-  //3) IF EVERYTHING IS RIGHT, SEND THE JWT TOKEN TO THE CLIENT
+  //3) IF EVERYTHING IS RIGHT, SEND THEjJWT TOKEN TO THE CLIENT
   createNewToken(user, 201, res);
 });
 
@@ -98,26 +98,37 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 //ONLY FOR RENDERED PAGES
-exports.isLoggedIn = catchAsync(async (req, res, next) => {
+exports.isLoggedIn = async (req, res, next) => {
+  console.log("here is the cookie:",req.cookies);
+  if (req.cookies.jwt) {
+    try {
+      // 1) verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
 
-  if(req.cookies.jwt){
-    //1) Verifying the Token
-    const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET); //Verify is async function
-  
-    //2)Check if user still exists
-    const currentUser = await User.findOne({ _id: decoded.id });
-    if (!currentUser) return next();
+      // 2) Check if user still exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
 
-    //3)check if the user changed the password after the token aws issued.
-    if (currentUser.changedPasswordAfter(decoded.iat) === true)
-    return next();
+      // 3) Check if user changed password after the token was issued
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
 
-    //THERE IS A LOGGED IN USER
-    res.locals.user = currentUser; 
-    next();
+      // THERE IS A LOGGED IN USER
+      res.locals.user = currentUser;
+      console.log('The logged in user details:',res.locals.user);
+      return next();
+    } catch (err) {
+      return next();
+    }
   }
   next();
-});
+};
 
 //RESTICATING THE OPERATION TO USER OF CERTAIN ROLE
 
