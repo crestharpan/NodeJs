@@ -27,7 +27,7 @@ const createNewToken = (user, statusCode, res) => {
   user.password = undefined;
 
   res.status(statusCode).json({
-    status: 'Success',
+    status: 'success',
     token,
     data: {
       user,
@@ -99,7 +99,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 //ONLY FOR RENDERED PAGES
 exports.isLoggedIn = async (req, res, next) => {
-  console.log("here is the cookie:",req.cookies);
+  
   if (req.cookies.jwt) {
     try {
       // 1) verify token
@@ -121,7 +121,7 @@ exports.isLoggedIn = async (req, res, next) => {
 
       // THERE IS A LOGGED IN USER
       res.locals.user = currentUser;
-      console.log('The logged in user details:',res.locals.user);
+      
       return next();
     } catch (err) {
       return next();
