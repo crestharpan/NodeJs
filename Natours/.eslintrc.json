@@ -1,6 +1,20 @@
 {
-  "extends": ["airbnb", "prettier", "plugin:node/recommended"],
+  "extends": [
+    "airbnb",
+    "prettier",
+    "plugin:node/recommended",
+    "eslint:recommended" // Add this to include the recommended ESLint rules
+  ],
   "plugins": ["prettier"],
+  "parserOptions": {
+    "ecmaVersion": "latest", // Support latest ECMAScript features
+    "sourceType": "module" // Use 'module' type for import/export
+  },
+  "env": {
+    "browser": true, // Allow browser globals
+    "es2021": true, // Support ECMAScript 2021 features
+    "node": true // Recognize Node.js globals like process, require, etc.
+  },
   "rules": {
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "spaced-comment": "off",
