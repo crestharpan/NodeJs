@@ -2428,7 +2428,7 @@
         try {
           const res = await axios({
             method: "POST",
-            url: `http://127.0.0.1:8080/api/V1/users/login`,
+            url: "http://127.0.0.1:8080/api/V1/users/login",
             data: {
               email,
               password
@@ -2449,9 +2449,12 @@
         try {
           const res = await axios({
             method: "GET",
-            url: `http://127.0.0.1:8080/api/V1/users/login`
+            url: "http://127.0.0.1:8080/api/V1/users/logout"
           });
-          if (res.status == "success") location.reload(true);
+          console.log(res.status);
+          if (res.status === 200) {
+            location.reload();
+          }
         } catch (err) {
           alerts.showAlerts("error", "Error while logging out. Try again!!");
         }
