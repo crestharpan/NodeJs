@@ -2403,10 +2403,27 @@
     }
   });
 
+  // public/js/alerts.js
+  var require_alerts = __commonJS({
+    "public/js/alerts.js"(exports) {
+      exports.hideAlert = () => {
+        const el = document.querySelector(".alert");
+        if (el) el.parentElement.removeChild(el);
+      };
+      exports.showAlerts = (type, message) => {
+        const markup = `<div class='alert alert--${type}'> ${message} </div>`;
+        exports.hideAlert();
+        document.querySelector("body").insertAdjacentHTML("afterbegin", markup);
+        window.setTimeout(exports.hideAlert, 5e3);
+      };
+    }
+  });
+
   // public/js/login.js
   var require_login = __commonJS({
     "public/js/login.js"(exports) {
       var axios = require_axios();
+      var alerts = require_alerts();
       exports.login = async (email, password) => {
         try {
           const res = await axios({
@@ -2419,13 +2436,13 @@
           });
           console.log("This is the response", res);
           if (res.data.status === "success") {
-            alert("Logged in Successfully");
+            alerts.showAlerts("success", "Logged In Success");
             window.setTimeout(() => {
               location.assign("/");
             }, 1500);
           }
         } catch (err) {
-          alert(err.response.data.message);
+          alerts.showAlerts("error", err.response.data.message);
         }
       };
     }

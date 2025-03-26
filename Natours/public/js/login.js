@@ -1,5 +1,6 @@
 /* eslint-disable */
 const axios = require('axios');
+const alerts = require('./alerts');
 exports.login = async (email, password) => {
   try {
     const res = await axios({
@@ -12,12 +13,12 @@ exports.login = async (email, password) => {
     });
     console.log('This is the response', res);
     if (res.data.status === 'success') {
-      alert('Logged in Successfully');
+      alerts.showAlerts('success', 'Logged In Success');
       window.setTimeout(() => {
         location.assign('/');
       }, 1500);
     }
   } catch (err) {
-    alert(err.response.data.message);
+    alerts.showAlerts('error', err.response.data.message);
   }
 };
