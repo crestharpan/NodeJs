@@ -2428,7 +2428,7 @@
         try {
           const res = await axios({
             method: "POST",
-            url: "http://127.0.0.1:8080/api/V1/users/login",
+            url: `http://127.0.0.1:8080/api/V1/users/login`,
             data: {
               email,
               password
@@ -2445,14 +2445,27 @@
           alerts.showAlerts("error", err.response.data.message);
         }
       };
+      exports.logout = async () => {
+        try {
+          const res = await axios({
+            method: "GET",
+            url: `http://127.0.0.1:8080/api/V1/users/login`
+          });
+          if (res.status == "success") location.reload(true);
+        } catch (err) {
+          alerts.showAlerts("error", "Error while logging out. Try again!!");
+        }
+      };
     }
   });
 
   // public/js/index.js
   var { displayMap } = require_leaflet();
   var { login } = require_login();
+  var { logout } = require_login();
   var leaflet = document.getElementById("map");
   var form = document.querySelector(".form");
+  var logOutBtn = document.querySelector(".nav__el--logout");
   if (leaflet) {
     const locations = JSON.parse(leaflet.dataset.locations);
     displayMap(locations);
@@ -2465,6 +2478,7 @@
       login(email, password);
     });
   }
+  if (logOutBtn) logOutBtn.addEventListener("click", logout);
 })();
 /*! Bundled license information:
 

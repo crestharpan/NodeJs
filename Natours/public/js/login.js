@@ -1,11 +1,12 @@
 /* eslint-disable */
 const axios = require('axios');
 const alerts = require('./alerts');
+
 exports.login = async (email, password) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8080/api/V1/users/login',
+      url: `http://127.0.0.1:8080/api/V1/users/login`,
       data: {
         email,
         password,
@@ -20,5 +21,17 @@ exports.login = async (email, password) => {
     }
   } catch (err) {
     alerts.showAlerts('error', err.response.data.message);
+  }
+};
+
+exports.logout = async () => {
+  try {
+    const res = await axios({
+      method: 'GET',
+      url: `http://127.0.0.1:8080/api/V1/users/login`,
+    });
+    if (res.status == 'success') location.reload(true);
+  } catch (err) {
+    alerts.showAlerts('error', 'Error while logging out. Try again!!');
   }
 };

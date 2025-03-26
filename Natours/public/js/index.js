@@ -1,10 +1,12 @@
 /* eslint-disable */
 const { displayMap } = require('./leaflet');
 const { login } = require('./login');
+const { logout } = require('./login');
 
 //DOM ELEMENTS
 const leaflet = document.getElementById('map');
 const form = document.querySelector('.form');
+const logOutBtn = document.querySelector('.nav__el--logout');
 
 // ----------------------------------------------
 // Get locations from HTML
@@ -23,3 +25,5 @@ if (form) {
     login(email, password);
   });
 }
+
+if (logOutBtn) logOutBtn.addEventListener('click', logout);
