@@ -65,7 +65,6 @@ app.use(
 //TEST MIDDLEWARE
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString(); //manipulating the req
-  console.log(req.cookies);
   next();
 });
 
