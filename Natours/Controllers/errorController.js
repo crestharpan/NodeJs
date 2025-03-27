@@ -54,22 +54,20 @@ const sendErrPro = (err, req, res) => {
       });
     }
 
-    return res.status(500).json({
-      status: 'Fail',
-      message: 'Something went Wrong',
-      errorName: err.name,
-    });
-  }
-  //B) For rendered webpage
-
-  if (err.isOperational) {
     return res.status(err.statusCode).render('error', {
       title: 'Something Went wrong',
       msg: err.message,
     });
-
-    //OTHER UNKNOWN PROGRAMMING ERRORS: DON'T GIVE DETAILS ABOUT THE ERROR TO THE CLIENT
   }
+
+  //B) For rendered webpage
+  if (err.isOperational) {
+    return res.status(err.statusCode).render('error', {
+      title: 'Something Went wronggg',
+      msg: err.message,
+    });
+  }
+  //OTHER UNKNOWN PROGRAMMING ERRORS: DON'T GIVE DETAILS ABOUT THE ERROR TO THE CLIENT
   return res.status(err.statusCode).render('error', {
     title: 'Something Went wrong',
     msg: 'please try again later',
@@ -77,7 +75,6 @@ const sendErrPro = (err, req, res) => {
 };
 
 module.exports = (err, req, res, next) => {
-  // console.log(err.stack);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'Error';
   if (process.env.NODE_ENV === 'development') {

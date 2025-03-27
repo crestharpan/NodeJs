@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "nodemon server.js",
-    "start:pro": " SET NODE_ENV=production&& nodemon server.js",
+    "start:pro": " SET NODE_ENV=production && nodemon server.js",
     "debug": "ndb server.js",
     "watch:js": "esbuild ./public/js/index.js --bundle --outdir=./public/js/bundled --watch",
     "build": "esbuild ./public/js/index.js --bundle --outdir=./public/js/bundled"
