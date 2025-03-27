@@ -23,45 +23,57 @@ const handleValidatonErroDB = (err) => {
 const handleJwtToken = () => new AppError('Invalid token', 401);
 
 const sendErrDev = (err, req, res) => {
+  //A) API
   if (req.originalUrl.startsWith('/api')) {
-    res.status(err.statusCode).json({
+    return res.status(err.statusCode).json({
       status: err.status,
       error: err,
       stack: err.stack,
       message: err.message,
     });
-  } else {
-    res.status(err.statusCode).render('error', {
-      title: 'Something Went wrong',
-      msg: err.message,
-    });
   }
+  //B) RENDER WEBSITE
+  return res.status(err.statusCode).render('error', {
+    title: 'Something Went wrong',
+    msg: err.message,
+  });
 };
 
 const handleJwtExpiredError = () =>
   new AppError('Your token has been expired. Please log in again', 401);
 
-const sendErrPro = (err, res) => {
-  //OPERATIONA ERROR: SEND MESSAGE TO THE CLIENT
+const sendErrPro = (err, req, res) => {
+  //A) APIS
+  if (req.originalUrl.startsWith('/api')) {
+    //OPERATIONAL ERROR: SEND MESSAGE TO THE CLIENT
 
-  if (err.isOperational) {
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message,
-    });
+    if (err.isOperational) {
+      return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message,
+      });
+    }
 
-    //OTHER UNKNOWN PROGRAMMING ERRORS: DON'T GIVE DETAILS ABOUT THE ERROR TO THE CLIENT
-  } else {
-    //LOG THE ERROR (FOR US TO IDENTIFY THE ERROR)
-    // console.error('ERROR:', err);
-    //SEND THE GENERIC MESSAGE ERROR TO THE CLIENT
-
-    res.status(500).json({
+    return res.status(500).json({
       status: 'Fail',
       message: 'Something went Wrong',
       errorName: err.name,
     });
   }
+  //B) For rendered webpage
+
+  if (err.isOperational) {
+    return res.status(err.statusCode).render('error', {
+      title: 'Something Went wrong',
+      msg: err.message,
+    });
+
+    //OTHER UNKNOWN PROGRAMMING ERRORS: DON'T GIVE DETAILS ABOUT THE ERROR TO THE CLIENT
+  }
+  return res.status(err.statusCode).render('error', {
+    title: 'Something Went wrong',
+    msg: 'please try again later',
+  });
 };
 
 module.exports = (err, req, res, next) => {
