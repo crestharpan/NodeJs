@@ -16,6 +16,7 @@ block content
           +navItem('#','My Bookings','briefcase',false)
           +navItem('#','My reviews','star',false)
           +navItem('#','Billing','credit-card',false)
+      - if(user.role='admin')
         .admin-nav
           h5.admin-nav__heading Admin
           ul.side-nav
@@ -32,18 +33,21 @@ block content
               label.form__label(for='name') Name
               input#name.form__input(
                 type='text',
-                value='Jonas Schmedtmann',
+                value=`${user.name}`,
                 required
               )
             .form__group.ma-bt-md
               label.form__label(for='email') Email address
               input#email.form__input(
                 type='email',
-                value='admin@natours.io',
+                value=`${user.email}`,
                 required
               )
             .form__group.form__photo-upload
-              img.form__user-photo(src='img/user.jpg', alt='User photo')
+              img.form__user-photo(
+                src=`img/users/${user.photo}`,
+                alt='User photo'
+              )
               a.btn-text(href='') Choose new photo
             .form__group.right
               button.btn.btn--small.btn--green Save settings

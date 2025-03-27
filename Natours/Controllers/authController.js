@@ -104,6 +104,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //GRANT ACCESS
   req.user = currentUser; //USING MIDDLEARE TO MANIPULATE THE REQUEST
+  res.locals.user = currentUser;
   next();
 });
 
