@@ -42,3 +42,7 @@ exports.userAccount = async (req, res) => {
     // user: currUser,
   });
 };
+
+exports.updateUserData = async (req, res, next) => {
+  console.log(req.body);
+};

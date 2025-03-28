@@ -5,7 +5,7 @@ const { logout } = require('./login');
 
 //DOM ELEMENTS
 const leaflet = document.getElementById('map');
-const form = document.querySelector('.form');
+const form = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el--logout');
 
 // ----------------------------------------------

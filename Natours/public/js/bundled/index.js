@@ -2467,7 +2467,7 @@
   var { login } = require_login();
   var { logout } = require_login();
   var leaflet = document.getElementById("map");
-  var form = document.querySelector(".form");
+  var form = document.querySelector(".form--login");
   var logOutBtn = document.querySelector(".nav__el--logout");
   if (leaflet) {
     const locations = JSON.parse(leaflet.dataset.locations);
