@@ -40,6 +40,7 @@ app.use('/api', limiter); //TO USE LIMITER ON ALL ROUTES FOR /API
 
 //BODY PARSER(READING DATA FROM BODY inTO REQ.BODY)
 app.use(express.json({ limit: '10KB' }));
+app.use(express.urlencoded({ extended: true, limit: '10KB' }));
 app.use(cookieParser());
 
 //DATA SANITIZATION AGAINST NOSQL QUERY INJECTION
