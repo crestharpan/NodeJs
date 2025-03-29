@@ -61,13 +61,14 @@ block content
         .line &nbsp;
         .user-view__form-container
           h2.heading-secondary.ma-bt-md Password change
-          form.form.form-user-settings
+          form.form.form-user-password
             .form__group
               label.form__label(for='password-current') Current password
               input#password-current.form__input(
                 type='password',
                 placeholder='••••••••',
                 required,
+                name='currPassword',
                 minlength='8'
               )
             .form__group
@@ -76,6 +77,7 @@ block content
                 type='password',
                 placeholder='••••••••',
                 required,
+                name='newPassword',
                 minlength='8'
               )
             .form__group.ma-bt-lg
@@ -84,6 +86,7 @@ block content
                 type='password',
                 placeholder='••••••••',
                 required,
+                name='consfirmPassword',
                 minlength='8'
               )
             .form__group.right

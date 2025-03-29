@@ -2466,18 +2466,18 @@
     "public/js/updateSettings.js"(exports) {
       var axios = require_axios();
       var alerts = require_alerts();
-      exports.updateData = async (name, email) => {
+      exports.updateSettings = async (data, type) => {
         try {
           const res = await axios({
             method: "PATCH",
-            url: "http://127.0.0.1:8080/api/V1/users/updateMe",
-            data: {
-              name,
-              email
-            }
+            url: `http://127.0.0.1:8080/api/V1/users/${type === "password" ? "updatePassword" : "updateMe"}`,
+            data
           });
           if (res.data.status === "success") {
-            alerts.showAlerts("success", "User updated successfully");
+            alerts.showAlerts(
+              "success",
+              `${type === "password" ? "Password" : "Data"} updated successfully`
+            );
           }
         } catch (err) {
           console.log(err.response.data.message);
@@ -2491,11 +2491,12 @@
   var { displayMap } = require_leaflet();
   var { login } = require_login();
   var { logout } = require_login();
-  var { updateData } = require_updateSettings();
+  var { updateSettings } = require_updateSettings();
   var leaflet = document.getElementById("map");
   var form = document.querySelector(".form--login");
   var logOutBtn = document.querySelector(".nav__el--logout");
   var userDataForm = document.querySelector(".form-user-data");
+  var userPasswordForm = document.querySelector(".form-user-password");
   if (leaflet) {
     const locations = JSON.parse(leaflet.dataset.locations);
     displayMap(locations);
@@ -2514,7 +2515,16 @@
       e.preventDefault();
       const name = document.getElementById("name").value;
       const email = document.getElementById("email").value;
-      updateData(name, email);
+      updateSettings({ name, email }, "emailAndName");
+    });
+  }
+  if (userPasswordForm) {
+    userPasswordForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const passwordCurrent = document.getElementById("password-current").value;
+      const password = document.getElementById("password").value;
+      const passwordConfirm = document.getElementById("password-confirm").value;
+      updateSettings({ passwordCurrent, password, passwordConfirm }, "password");
     });
   }
 })();

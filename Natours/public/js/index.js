@@ -2,13 +2,14 @@
 const { displayMap } = require('./leaflet');
 const { login } = require('./login');
 const { logout } = require('./login');
-const { updateData } = require('./updateSettings');
+const { updateSettings } = require('./updateSettings');
 
 //DOM ELEMENTS
 const leaflet = document.getElementById('map');
 const form = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
+const userPasswordForm = document.querySelector('.form-user-password');
 
 // ----------------------------------------------
 // Get locations from HTML
@@ -35,6 +36,16 @@ if (userDataForm) {
     e.preventDefault();
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
-    updateData(name, email);
+    updateSettings({ name, email }, 'emailAndName');
+  });
+}
+
+if (userPasswordForm) {
+  userPasswordForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const passwordCurrent = document.getElementById('password-current').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+    updateSettings({ passwordCurrent, password, passwordConfirm }, 'password');
   });
 }

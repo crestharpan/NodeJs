@@ -216,7 +216,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   if (!user) return next(new AppError('cannot find the user', 401));
 
   //2) CHECK IF POSTED CURRENT PASSWORD IS VALID
-  console.log(req.body.passwordCurrent);
+
   if (
     (await user.correctPassword(req.body.passwordCurrent, user.password)) ===
     false
