@@ -11,7 +11,7 @@ exports.getMe = (req, res, next) => {
 // ROUTE HANDLERS
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  //1) CREATEERROR IF USER POSTS PASSWORD DATA
+  //1) CREATE ERROR IF USER POSTS PASSWORD DATA
   if (req.body.password || req.body.passwordConfirm) {
     return next(new AppError(' This route is not for updating password', 400));
   }
@@ -21,9 +21,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   }
   const allowedField = ['name', 'email'];
   Object.keys(req.body).forEach((el) => {
-    if (allowedField.includes(el)) {
-      user[el] = req.body[el];
-    }
+    if (allowedField.includes(el)) user[el] = req.body[el];
   });
   await user.save({ validateModifiedOnly: true });
   res.status(200).json({
