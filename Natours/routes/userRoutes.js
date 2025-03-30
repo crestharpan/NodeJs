@@ -1,8 +1,12 @@
 const express = require('express');
 
+const multer = require('multer'); //THIS IS A MIDDLEWARE TO HANDLE MULTI FORM DATA
+
 const userController = require('../Controllers/userController');
 
 const authController = require('../Controllers/authController');
+
+const upload = multer({ dest: 'public/img/users' });
 
 const router = express.Router();
 
@@ -16,7 +20,7 @@ router.patch('/resetPassword/:token', authController.resetPassword);
 router.use(authController.protect);
 
 router.patch('/updatePassword', authController.updatePassword);
-router.patch('/updateMe', userController.updateMe);
+router.patch('/updateMe', upload.single('photo'), userController.updateMe);
 
 router.get('/me', userController.getMe, userController.getUser);
 router.delete('/deleteMe', userController.deleteMe);
