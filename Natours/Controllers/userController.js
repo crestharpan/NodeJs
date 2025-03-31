@@ -40,7 +40,7 @@ exports.getMe = (req, res, next) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   //1) CREATE ERROR IF USER POSTS PASSWORD DATA
-  console.log(req.body);
+
   if (req.body.password || req.body.passwordConfirm) {
     return next(new AppError(' This route is not for updating password', 400));
   }
@@ -48,15 +48,14 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new AppError('User not found', 401));
   }
-  const allowedField = ['name', 'email', 'photo'];
+  const allowedField = ['name', 'email'];
   Object.keys(req.body).forEach((el) => {
-    if (allowedField.includes(el)) {
-      user[el] = req.body[el];
-      if (req.file) {
-        user.photo = req.file.filename;
-      }
-    }
+    allowedField.includes(el);
+    user[el] = req.body[el];
   });
+  if (req.file) {
+    user.photo = req.file.filename;
+  }
   await user.save({ validateModifiedOnly: true });
   res.status(200).json({
     status: 'success',
