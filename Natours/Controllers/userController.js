@@ -1,7 +1,35 @@
-const AppError = require('../utils/appError');
+const multer = require('multer');
 const User = require('../models/usersModel');
+const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/img/users');
+  },
+  filename: (req, file, cb) => {
+    //user-nvdf8fv9dd0fvdf0-3444453442
+    //user-id-timestamp
+    const ext = file.mimetype.split('/')[1]; //this where the type or extension is stored
+    cb(null, `${req.user.id}-${Date.now()}.${ext}`);
+  },
+});
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Invalid file type', 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.uploadUserPhoto = upload.single('photo');
 
 exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
@@ -47,5 +75,6 @@ exports.createUser = (req, res) => {
 };
 exports.getAllUsers = factory.getAll(User);
 exports.getUser = factory.getOne(User);
+//DO NOT UPDATE PASSWOR WITH THIS MIDDLEWARE
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
