@@ -31,6 +31,8 @@ exports.uploadTourImages = upload.fields([
   },
 ]);
 
+exports.resizeTourImages = (req, res, next) => {};
+
 exports.aliasRoute = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = '-ratingsAverage,price';
