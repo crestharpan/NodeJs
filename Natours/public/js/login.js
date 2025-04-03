@@ -30,7 +30,7 @@ exports.logout = async () => {
       method: 'GET',
       url: 'http://127.0.0.1:8080/api/V1/users/logout',
     });
-    console.log(res.status);
+    // console.log(res.status);
     if (res.status === 200) {
       location.reload();
     }

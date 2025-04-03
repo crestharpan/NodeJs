@@ -31,7 +31,16 @@ exports.uploadTourImages = upload.fields([
   },
 ]);
 
-exports.resizeTourImages = (req, res, next) => {};
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
+  if (!req.files.imageCover || !req.files.images) {
+    return next();
+  }
+  await sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`);
+});
 
 exports.aliasRoute = (req, res, next) => {
   req.query.limit = '5';
