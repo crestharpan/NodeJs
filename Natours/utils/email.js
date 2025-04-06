@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 const pug = require('pug');
-const htmlToText = require('html-to-text');
+const { htmlToText } = require('html-to-text');
 
 dotenv.config({ path: '../config.env' });
 
@@ -47,10 +47,10 @@ module.exports = class Email {
       }),
     };
     //3) CREATE A TRANSPORT AND SEND THE EMAIL
-    await this.newTransport().sendEmail(emailOptions);
+    await this.newTransport().sendMail(emailOptions);
   }
 
   async sendWelcome() {
-    await this.sendEmail('Welcome', 'Welcome to the Natours family');
+    await this.send('Welcome', 'Welcome to the Natours family');
   }
 };
