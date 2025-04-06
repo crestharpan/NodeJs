@@ -26,6 +26,8 @@ const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
 
+console.log('NODE_ENV:', process.env.NODE_ENV);
+
 //HANDLING THE REJECTED PROMISES
 process.on('unhandledRejection', (err) => {
   console.log(err.name, err.message);

@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 const pug = require('pug');
 const { htmlToText } = require('html-to-text');
+const nodemailerSendgrid = require('nodemailer-sendgrid');
 
 dotenv.config({ path: '../config.env' });
 
@@ -15,7 +16,12 @@ module.exports = class Email {
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
-      return 1;
+      return nodemailer.createTransport(
+        nodemailerSendgrid({
+          user: process.env.SENDGRID_USERNAME,
+          pass: process.env.SENDGRID_PASSWORD,
+        }),
+      );
     }
     return nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
