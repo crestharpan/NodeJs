@@ -16,12 +16,15 @@ module.exports = class Email {
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
-      return nodemailer.createTransport(
-        nodemailerSendgrid({
-          user: process.env.SENDGRID_USERNAME,
-          pass: process.env.SENDGRID_PASSWORD,
-        }),
-      );
+      return nodemailer.createTransport({
+        host: 'smtp-relay.brevo.com',
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.BREVO_LOGIN, // your Brevo login (usually your email)
+          pass: process.env.BREVO_PASSWORD, // your Brevo SMTP password
+        },
+      });
     }
     return nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
@@ -35,25 +38,29 @@ module.exports = class Email {
 
   //SEND THE ACTUAL EMAIL
   async send(template, subject) {
-    //1) RENDER THE HTML BASED ON THE PUG TEMPLATE
-    const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
-      firstName: this.firstName,
-      url: this.url,
-      subject,
-    });
+    try {
+      const html = pug.renderFile(
+        `${__dirname}/../views/email/${template}.pug`,
+        {
+          firstName: this.firstName,
+          url: this.url,
+          subject,
+        },
+      );
 
-    //2) DEFINE THE EMAIL OPTIONS
-    const emailOptions = {
-      from: this.from,
-      to: this.to,
-      subject,
-      html,
-      text: htmlToText(html, {
-        wordwrap: false,
-      }),
-    };
-    //3) CREATE A TRANSPORT AND SEND THE EMAIL
-    await this.newTransport().sendMail(emailOptions);
+      const emailOptions = {
+        from: this.from,
+        to: this.to,
+        subject,
+        html,
+        text: htmlToText(html),
+      };
+
+      const info = await this.newTransport().sendMail(emailOptions);
+      console.log('✅ Email sent:', info.messageId || info);
+    } catch (err) {
+      console.error('❌ Error sending email:', err);
+    }
   }
 
   async sendWelcome() {
