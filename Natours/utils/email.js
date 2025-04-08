@@ -11,11 +11,11 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
-    this.from = `Arpan Shrestha <${process.env.EMAIL_FROM}>`;
+    this.from = `Arpan Shrestha <arpanshrestha225@gmail.com>`;
   }
 
   newTransport() {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV.startsWith('p')) {
       return nodemailer.createTransport({
         host: 'smtp-relay.brevo.com',
         port: 587,
@@ -26,6 +26,7 @@ module.exports = class Email {
         },
       });
     }
+
     return nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT,
@@ -57,7 +58,6 @@ module.exports = class Email {
       };
 
       const info = await this.newTransport().sendMail(emailOptions);
-      console.log('✅ Email sent:', info.messageId || info);
     } catch (err) {
       console.error('❌ Error sending email:', err);
     }
