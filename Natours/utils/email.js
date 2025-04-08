@@ -2,7 +2,6 @@ const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 const pug = require('pug');
 const { htmlToText } = require('html-to-text');
-const nodemailerSendgrid = require('nodemailer-sendgrid');
 
 dotenv.config({ path: '../config.env' });
 
