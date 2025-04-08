@@ -57,7 +57,7 @@ module.exports = class Email {
         text: htmlToText(html),
       };
 
-      const info = await this.newTransport().sendMail(emailOptions);
+      await this.newTransport().sendMail(emailOptions);
     } catch (err) {
       console.error('❌ Error sending email:', err);
     }
