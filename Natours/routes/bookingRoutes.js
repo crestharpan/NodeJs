@@ -1,5 +1,4 @@
 const express = require('express');
-const Booking = require('../models/bookingsModel');
 const bookingController = require('../Controllers/bookingController');
 
 const router = express.Router();
