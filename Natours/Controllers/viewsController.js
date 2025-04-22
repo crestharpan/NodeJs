@@ -38,12 +38,10 @@ exports.getLoginForm = catchAsync(async (req, res) => {
     });
 });
 
-exports.getMyTours = catchAsync(async (req, res, next) => {
-  const bookings = await Booking.find({ user: req.user._id });
-  const toursIds = bookings.map((el) => el.tour);
-
-  const tours = await Tour.find({ tour: { $in: toursIds } });
-
+exports.getMyTours = catchAsync(async (req, res) => {
+  const bookings = await Booking.find({ user: req.user.id });
+  const toursIds = bookings.map((el) => el.tour._id);
+  const tours = await Tour.find({ _id: { $in: toursIds } });
   res.status(200).render('overview', {
     title: 'My Tours',
     tours,
