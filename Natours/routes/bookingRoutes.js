@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.use(authController.protect);
 
-router.post('/bookTour', bookingController.createOne);
+router.post('/bookTour', bookingController.createBooking);
 
 router.use(authController.restrictTO('admin', 'lead-guide'));
 

@@ -6,7 +6,7 @@ dotenv.config({ path: './config.env' });
 
 //HANDLING UNCAUGHT EXCEPTIONS
 process.on('uncaughtException', (err) => {
-  console.log(err.name, err.message);
+  console.log(err.name, err.message, err);
   console.log('UNCAUGHT REJECTION--Shutting the application');
 
   process.exit(1);
