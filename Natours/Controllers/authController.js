@@ -6,7 +6,7 @@ const User = require('../models/usersModel');
 const catchAsync = require('../utils/catchAsync');
 const Email = require('../utils/email');
 
-const signToken = (id) => {
+const signToken = function (id) {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
@@ -144,7 +144,7 @@ exports.isLoggedIn = async (req, res, next) => {
 
 //RESTICATING THE OPERATION TO USER OF CERTAIN ROLE
 
-exports.restrictTO = (...roles) => {
+exports.restrictTO = function (...roles) {
   return (req, res, next) => {
     //ROLES IS AN ARRAY OF[ADMIN,LEAD-GUIDE]
     if (!roles.includes(req.user.role)) {
