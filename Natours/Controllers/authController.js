@@ -225,7 +225,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   //3) UPDATE THE PASSWORD
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
-  await user.save();
+  await user.save(); //THE SAVE() FUNCTION RETURNS A PROMISE SO HAVE TO AWAIT
 
   //4)LOG THE USER IN AND SEND JWT
   createNewToken(user, 200, res);
