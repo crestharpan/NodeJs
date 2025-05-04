@@ -83,9 +83,12 @@ exports.bookTour = catchAsync(async (req, res, next) => {
 
   //2) GENERATE A HASH
   const uid = uuidv4();
+  console.log(uid);
   const message = `total_amount=${tour.price},transaction_uuid=${uid},product_code=EPAYTEST`;
   const hash = CryptoJS.HmacSHA256(message, process.env.ESEWA_SECRET);
   const hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+
+  console.log(hashInBase64);
 
   //3) RENDER THE PAYMENT GATEWAY PAGE
   res.status(200).render('book', {

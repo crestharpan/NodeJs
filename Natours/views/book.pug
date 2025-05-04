@@ -1,22 +1,59 @@
 extends base
 
 block content
+  h1 Order Page
+
+  .container
+    .card
+      .container-fliud
+        .wrapper.row
+          .preview.col-md-6
+            .preview-pic.tab-content
+              #pic-1.tab-pane.active
+                img(
+                  style='width: 300px; height: 300px; object-fit: cover',
+                  src=image
+                )
+
+          .details.col-md-6
+            h3.product-title= title
+            .rating
+              .stars
+                span.fa.fa-star.checked
+                span.fa.fa-star.checked
+                span.fa.fa-star.checked
+                span.fa.fa-star
+                span.fa.fa-star
+              span.review-no 41 reviews
+            p.product-description
+              = description
+              span Rs. #{ price }
+            p.vote
+              strong 91%
+              |
+              | of buyers enjoyed this product!
+              strong (87 votes)
+            .action
+              button.add-to-cart.btn.btn-default(type='button') add to cart
+              button.like.btn.btn-default(type='button')
+                span.fa.fa-heart
+
   form(
     action='https://rc-epay.esewa.com.np/api/epay/main/v2/form',
     method='POST'
   )
-    input#amount(type='hidden', name='amount', value='100', required='')
-    input#tax_amount(type='hidden', name='tax_amount', value='10', required='')
+    input#amount(type='hidden', name='amount', value=price, required='')
+    input#tax_amount(type='hidden', name='tax_amount', value='0', required='')
     input#total_amount(
       type='hidden',
       name='total_amount',
-      value='110',
+      value=price,
       required=''
     )
     input#transaction_uuid(
       type='hidden',
       name='transaction_uuid',
-      value='241028',
+      value=uid,
       required=''
     )
     input#product_code(
@@ -58,7 +95,7 @@ block content
     input#signature(
       type='hidden',
       name='signature',
-      value='i94zsd3oXF6ZsSr/kGqT4sSzYQzjj1W/waxjWyRwaME=',
+      value=signature,
       required=''
     )
     input(value='Submit', type='submit')
