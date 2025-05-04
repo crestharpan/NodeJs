@@ -2486,16 +2486,24 @@
     }
   });
 
+  // public/js/esewa.js
+  var require_esewa = __commonJS({
+    "public/js/esewa.js"() {
+    }
+  });
+
   // public/js/index.js
   var { displayMap } = require_leaflet();
   var { login } = require_login();
   var { logout } = require_login();
   var { updateSettings } = require_updateSettings();
+  var { bookTour } = require_esewa();
   var leaflet = document.getElementById("map");
   var form = document.querySelector(".form--login");
   var logOutBtn = document.querySelector(".nav__el--logout");
   var userDataForm = document.querySelector(".form-user-data");
   var userPasswordForm = document.querySelector(".form-user-password");
+  var bookBtn = document.getElementById("book-tour");
   if (leaflet) {
     const locations = JSON.parse(leaflet.dataset.locations);
     displayMap(locations);
