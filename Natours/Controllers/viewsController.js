@@ -88,16 +88,16 @@ exports.bookTour = catchAsync(async (req, res, next) => {
   const hash = CryptoJS.HmacSHA256(message, process.env.ESEWA_SECRET);
   const hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
 
-  console.log(hashInBase64);
-
   //3) RENDER THE PAYMENT GATEWAY PAGE
   res.status(200).render('book', {
     description: tour.description,
-    image: tour.imageCover,
+    image: `/img/tours/${tour.imageCover}`,
     id: tour.id,
     title: tour.name,
     uid: uid,
     price: tour.price,
     signature: hashInBase64,
+    averageRating: `⭐${tour.ratingsAverage}`,
+    quantityRating: tour.ratingsQuantity,
   });
 });

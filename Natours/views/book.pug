@@ -1,42 +1,83 @@
 extends base
 
+block append head
+  style.
+    .product-container {
+      display: flex;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 900px;
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: auto;
+      max-width: 400px;
+      object-fit: cover;
+    }
+
+    .product-details {
+      padding: 30px;
+      flex: 1;
+    }
+
+    .product-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .product-description {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    .product-price {
+      font-size: 24px;
+      color: #e91e63;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .product-reviews {
+      font-size: 15px;
+      color: #777;
+      margin-bottom: 25px;
+    }
+
+    .add-to-cart-btn {
+      padding: 12px 24px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .add-to-cart-btn:hover {
+      background-color: #388e3c;
+    }
+
 block content
-  h1 Order Page
+  h1 Booking page
 
-  .container
-    .card
-      .container-fliud
-        .wrapper.row
-          .preview.col-md-6
-            .preview-pic.tab-content
-              #pic-1.tab-pane.active
-                img(
-                  style='width: 300px; height: 300px; object-fit: cover',
-                  src=image
-                )
-
-          .details.col-md-6
-            h3.product-title= title
-            .rating
-              .stars
-                span.fa.fa-star.checked
-                span.fa.fa-star.checked
-                span.fa.fa-star.checked
-                span.fa.fa-star
-                span.fa.fa-star
-              span.review-no 41 reviews
-            p.product-description
-              = description
-              span Rs. #{ price }
-            p.vote
-              strong 91%
-              |
-              | of buyers enjoyed this product!
-              strong (87 votes)
-            .action
-              button.add-to-cart.btn.btn-default(type='button') add to cart
-              button.like.btn.btn-default(type='button')
-                span.fa.fa-heart
+  .product-container
+    .product-image
+      img(src=image, alt='Product Image')
+    .product-details
+      h1.product-title= title
+      p.product-description Breathtaking view to refresh your whole body.
+      .product-price= '$' + price
+      .product-reviews= averageRating
+      button.add-to-cart-btn Add to Cart
 
   form(
     action='https://rc-epay.esewa.com.np/api/epay/main/v2/form',
@@ -98,4 +139,10 @@ block content
       value=signature,
       required=''
     )
-    input(value='Submit', type='submit')
+    input(
+      type='submit',
+      value='Book',
+      style='display: block; margin: 20px auto 0 auto; background-color: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer'
+    )
+
+block footer
