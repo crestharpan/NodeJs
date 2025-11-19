@@ -64,8 +64,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   }
   const allowedField = ['name', 'email'];
   Object.keys(req.body).forEach((el) => {
-    allowedField.includes(el);
-    user[el] = req.body[el];
+    if (allowedField.includes(el)) user[el] = req.body[el];
   });
   if (req.file) {
     user.photo = req.file.filename;

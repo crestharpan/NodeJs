@@ -53,7 +53,6 @@ exports.login = catchAsync(async (req, res, next) => {
   //DESTRUCTURING THE OBJECT
   const { email, password } = req.body;
   //1) CHECK IF THE EMAIL AND PASSWORD EXIST
-  console.log(email, password);
   if (!email || !password) {
     return next(new AppError('Please provide the email or password', 400));
   }
@@ -100,7 +99,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   const currentUser = await User.findOne({ _id: decoded.id });
   if (!currentUser) return next(new AppError('The user does not exist', 401));
 
-  //4)check if the user changed the password after the token aws issued.
+  //4)check if the user changed the password after the token was issued.
   if (currentUser.changedPasswordAfter(decoded.iat) === true)
     return next(new AppError('Password Changed', 401));
 

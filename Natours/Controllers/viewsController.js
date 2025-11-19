@@ -33,7 +33,7 @@ exports.getLoginForm = catchAsync(async (req, res) => {
     .status(200)
     .set(
       'Content-Security-Policy',
-      "connect-src 'self' https://cdnjs.cloudflare.com",
+      "connect-src 'self' http://127.0.0.1:8080 https://cdnjs.cloudflare.com",
     )
     .render('login', {
       title: 'login',
@@ -83,7 +83,6 @@ exports.bookTour = catchAsync(async (req, res, next) => {
 
   //2) GENERATE A HASH
   const uid = uuidv4();
-  console.log(uid);
   const message = `total_amount=${tour.price},transaction_uuid=${uid},product_code=EPAYTEST`;
   const hash = CryptoJS.HmacSHA256(message, process.env.ESEWA_SECRET);
   const hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
