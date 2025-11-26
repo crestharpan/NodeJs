@@ -4,6 +4,8 @@ block append head
   style.
     .product-container {
       display: flex;
+      flex-direction: column;
+      gap: 4px;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -23,37 +25,51 @@ block append head
     }
 
     .product-details {
-      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-left: 30px;
+      padding-right: 30px;
       flex: 1;
     }
 
     .product-title {
       font-size: 28px;
-      margin-bottom: 20px;
     }
 
     .product-description {
       font-size: 16px;
       color: #555;
-      margin-bottom: 25px;
     }
 
     .product-price {
       font-size: 24px;
-      color: #e91e63;
+      color: #4caf50;
       font-weight: bold;
-      margin-bottom: 15px;
     }
 
     .product-reviews {
       font-size: 15px;
       color: #777;
-      margin-bottom: 25px;
     }
 
-    .add-to-cart-btn {
+    .small-element {
+      display: flex;
+      align-self: center;
+    }
+
+    form {
+      display: flex;
+      align-self: stretch;
+      flex-direction: column;
+    }
+
+    .add-to-cart-btn,
+    .book-btn {
       padding: 12px 24px;
       background-color: #4caf50;
+      margin-left: 5px;
+      margin-right: 5px;
       color: white;
       border: none;
       font-size: 16px;
@@ -65,10 +81,11 @@ block append head
     .add-to-cart-btn:hover {
       background-color: #388e3c;
     }
+    .book-btn:hover {
+      background-color: #388e3c;
+    }
 
 block content
-  h1 Booking page
-
   .product-container
     .product-image
       img(src=image, alt='Product Image')
@@ -77,72 +94,74 @@ block content
       p.product-description Breathtaking view to refresh your whole body.
       .product-price= '$' + price
       .product-reviews= averageRating
-      button.add-to-cart-btn Add to Cart
-
-  form(
-    action='https://rc-epay.esewa.com.np/api/epay/main/v2/form',
-    method='POST'
-  )
-    input#amount(type='hidden', name='amount', value=price, required='')
-    input#tax_amount(type='hidden', name='tax_amount', value='0', required='')
-    input#total_amount(
-      type='hidden',
-      name='total_amount',
-      value=price,
-      required=''
+    button.add-to-cart-btn Add to Cart
+    p.small-element or simply
+    form(
+      action='https://rc-epay.esewa.com.np/api/epay/main/v2/form',
+      method='POST'
     )
-    input#transaction_uuid(
-      type='hidden',
-      name='transaction_uuid',
-      value=uid,
-      required=''
-    )
-    input#product_code(
-      type='hidden',
-      name='product_code',
-      value='EPAYTEST',
-      required=''
-    )
-    input#product_service_charge(
-      type='hidden',
-      name='product_service_charge',
-      value='0',
-      required=''
-    )
-    input#product_delivery_charge(
-      type='hidden',
-      name='product_delivery_charge',
-      value='0',
-      required=''
-    )
-    input#success_url(
-      type='hidden',
-      name='success_url',
-      value='https://developer.esewa.com.np/success',
-      required=''
-    )
-    input#failure_url(
-      type='hidden',
-      name='failure_url',
-      value='https://developer.esewa.com.np/failure',
-      required=''
-    )
-    input#signed_field_names(
-      type='hidden',
-      name='signed_field_names',
-      value='total_amount,transaction_uuid,product_code',
-      required=''
-    )
-    input#signature(
-      type='hidden',
-      name='signature',
-      value=signature,
-      required=''
-    )
-    input(
-      type='submit',
-      value='Book',
-      style='display: block; margin: 20px auto 0 auto; background-color: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer'
-    )
+      input#amount(type='hidden', name='amount', value=price, required='')
+      input#tax_amount(
+        type='hidden',
+        name='tax_amount',
+        value='0',
+        required=''
+      )
+      input#total_amount(
+        type='hidden',
+        name='total_amount',
+        value=price,
+        required=''
+      )
+      input#transaction_uuid(
+        type='hidden',
+        name='transaction_uuid',
+        value=uid,
+        required=''
+      )
+      input#product_code(
+        type='hidden',
+        name='product_code',
+        value='EPAYTEST',
+        required=''
+      )
+      input#product_service_charge(
+        type='hidden',
+        name='product_service_charge',
+        value='0',
+        required=''
+      )
+      input#product_delivery_charge(
+        type='hidden',
+        name='product_delivery_charge',
+        value='0',
+        required=''
+      )
+      input#success_url(
+        type='hidden',
+        name='success_url',
+        value='https://developer.esewa.com.np/success',
+        required=''
+      )
+      input#failure_url(
+        type='hidden',
+        name='failure_url',
+        value='https://developer.esewa.com.np/failure',
+        required=''
+      )
+      input#signed_field_names(
+        type='hidden',
+        name='signed_field_names',
+        value='total_amount,transaction_uuid,product_code',
+        required=''
+      )
+      input#signature(
+        type='hidden',
+        name='signature',
+        value=signature,
+        required=''
+      )
+      button.book-btn(type='submit') Book
+      //- style='display: block; margin: 20px auto 0 auto; background-color: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer'
 
 block footer
