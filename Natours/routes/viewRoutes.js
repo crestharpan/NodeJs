@@ -5,6 +5,12 @@ const authController = require('../Controllers/authController');
 const router = express.Router();
 
 router.get('/', authController.isLoggedIn, viewsController.getOverview);
+router.get(
+  '/tour/top-5-cheap-tours',
+  authController.protect,
+  viewsController.getCheapTours,
+);
+
 router.get('/tour/:slug', authController.isLoggedIn, viewsController.getTour);
 router.get('/book/:id', authController.protect, viewsController.bookTour);
 router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);

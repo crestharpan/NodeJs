@@ -243,6 +243,18 @@ body {
   padding: 1.25rem 3rem !important;
   font-size: 1.4rem !important;
 }
+.btn--link {
+  display: flex;
+  width: 90rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+.link--style {
+  font-size: 3rem;
+  text-decoration: none;
+  color: #fff;
+}
 
 .btn-small,
 .btn-small:link,
@@ -1077,6 +1089,7 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 7rem;
+  margin-bottom: 35px;
 }
 
 .card {

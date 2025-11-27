@@ -14,6 +14,7 @@ exports.getOverview = catchAsync(async (req, res, next) => {
   res.status(200).render('overview', {
     title: 'All Tours',
     tours,
+    setExplore: true,
   });
 });
 exports.getTour = catchAsync(async (req, res, next) => {
@@ -47,6 +48,7 @@ exports.getMyTours = catchAsync(async (req, res) => {
   res.status(200).render('overview', {
     title: 'My Tours',
     tours,
+    setExplore: false,
   });
 });
 
@@ -99,4 +101,12 @@ exports.bookTour = catchAsync(async (req, res, next) => {
     averageRating: `⭐${tour.ratingsAverage}`,
     quantityRating: tour.ratingsQuantity,
   });
+});
+
+exports.getCheapTours = catchAsync(async (req, res, next) => {
+  console.log('I am here inside the cheap');
+  const tours = await Tour.find().sort('price -ratingsAverage').limit(5);
+  if (!tours) return next(new AppError('Invalid Route', 404));
+
+  res.status(200).render('cheapTours', { tours });
 });
