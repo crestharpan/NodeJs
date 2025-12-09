@@ -104,7 +104,6 @@ exports.bookTour = catchAsync(async (req, res, next) => {
 });
 
 exports.getCheapTours = catchAsync(async (req, res, next) => {
-  console.log('I am here inside the cheap');
   const tours = await Tour.find().sort('price -ratingsAverage').limit(5);
   if (!tours) return next(new AppError('Invalid Route', 404));
 

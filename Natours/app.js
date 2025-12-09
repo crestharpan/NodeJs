@@ -9,6 +9,7 @@ const mongoSantitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser'); //PARSE COOKIE FROM THE INCOMING REQUEST
+const compression = require('compression');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./Controllers/errorController');
 //importing the routes module
@@ -78,6 +79,8 @@ app.use(
     ],
   }),
 );
+
+app.use(compression()); //WORKS FOR THE TEXT,
 
 //TEST MIDDLEWARE
 app.use((req, res, next) => {
