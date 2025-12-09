@@ -6,7 +6,7 @@ exports.login = async (email, password) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8080/api/V1/users/login',
+      url: '/api/V1/users/login',
       data: {
         email,
         password,
@@ -28,7 +28,7 @@ exports.logout = async () => {
   try {
     const res = await axios({
       method: 'GET',
-      url: 'http://127.0.0.1:8080/api/V1/users/logout',
+      url: '/api/V1/users/logout',
     });
     // console.log(res.status);
     if (res.status === 200) {

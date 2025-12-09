@@ -11,7 +11,7 @@
     "start:pro": "SET NODE_ENV=production && nodemon server.js",
     "debug": "ndb server.js",
     "watch:js": "esbuild ./public/js/index.js --bundle --outdir=./public/js/bundled --watch",
-    "build": "esbuild ./public/js/index.js --bundle --outdir=./public/js/bundled"
+    "build:js": "esbuild ./public/js/index.js --bundle --minify --sourcemap --outdir=./public/js/bundled"
   },
   "author": "Arpan Shrestha",
   "license": "ISC",
