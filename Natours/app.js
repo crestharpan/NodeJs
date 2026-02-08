@@ -42,9 +42,9 @@ app.use(helmet()); //SET SECURITY HTTP HEADERS
 // );
 
 //DEVELOPMENT LOGGING
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev')); //it will return the req
-}
+// if (process.env.NODE_ENV === 'development') {
+app.use(morgan('dev')); //it will return the req
+// }
 
 //LIMIT THE REQUEST FROM THE SAME IP
 const limiter = rateLimit({

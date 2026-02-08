@@ -39,6 +39,17 @@ exports.getLoginForm = catchAsync(async (req, res) => {
       title: 'login',
     });
 });
+exports.getSignUpForm = catchAsync(async (req, res) => {
+  res
+    .status(200)
+    .set(
+      'Content-Security-Policy',
+      "connect-src 'self' http://127.0.0.1:8080 https://cdnjs.cloudflare.com",
+    )
+    .render('signup', {
+      title: 'signup',
+    });
+});
 
 exports.getMyTours = catchAsync(async (req, res) => {
   const bookings = await Booking.find({ user: req.user.id });

@@ -1,6 +1,7 @@
 /* eslint-disable */
 const { displayMap } = require('./leaflet');
 const { login } = require('./login');
+const { signup } = require('./signup');
 const { logout } = require('./login');
 const { updateSettings } = require('./updateSettings');
 const { bookTour } = require('./esewa');
@@ -8,6 +9,7 @@ const { bookTour } = require('./esewa');
 //DOM ELEMENTS
 const leaflet = document.getElementById('map');
 const form = document.querySelector('.form--login');
+const signUpForm = document.querySelector('.form--signup');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
@@ -30,6 +32,17 @@ if (form) {
     login(email, password);
   });
 }
+if (signUpForm) {
+  signUpForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+    signup(name, email, password, passwordConfirm);
+  });
+}
 
 if (logOutBtn) logOutBtn.addEventListener('click', logout);
 
@@ -40,7 +53,7 @@ if (userDataForm) {
     form.append('name', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
-    // console.log(form);
+
     updateSettings(form, 'data');
   });
 }
@@ -64,11 +77,3 @@ if (userPasswordForm) {
     document.getElementById('password-confirm').value = '';
   });
 }
-
-// if (bookBtn) {
-//   bookBtn.addEventListener('click', (e) => {
-//     e.target.textContent = 'Processing...';
-//     const { tourId } = e.target.dataset;
-//     bookTour(tourId);
-//   });
-// }

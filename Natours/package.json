@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "start:pro": "SET NODE_ENV=production && nodemon server.js",
+    "start:pro": "NODE_ENV=production node server.js",
     "debug": "ndb server.js",
     "watch:js": "esbuild ./public/js/index.js --bundle --outdir=./public/js/bundled --watch",
     "build:js": "esbuild ./public/js/index.js --bundle --minify --sourcemap --outdir=./public/js/bundled"
