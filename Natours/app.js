@@ -25,26 +25,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, '/public')));
 //GLOBAL MIDDLEWARE
 app.use(helmet()); //SET SECURITY HTTP HEADERS
-// app.use(
-//   helmet.contentSecurityPolicy({
-//     directives: {
-//       defaultSrc: ["'self'"],
-//       connectSrc: [
-//         "'self'",
-//         'http://127.0.0.1:8080',
-//         'https://cdnjs.cloudflare.com',
-//       ],
-//       scriptSrc: ["'self'", 'https://cdnjs.cloudflare.com'],
-//       styleSrc: ["'self'", 'https://fonts.googleapis.com'],
-//       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-//     },
-//   }),
-// );
 
 //DEVELOPMENT LOGGING
-// if (process.env.NODE_ENV === 'development') {
-app.use(morgan('dev')); //it will return the req
-// }
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev')); //it will return the req
+}
 
 //LIMIT THE REQUEST FROM THE SAME IP
 const limiter = rateLimit({
